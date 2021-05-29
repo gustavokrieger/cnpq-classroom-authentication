@@ -36,6 +36,14 @@ function App(): JSX.Element {
         <p>Latitude: {latitude}</p>
         <p>Longitude: {longitude}</p>
         <p>Accuracy: {accuracy}</p>
+        <a
+          className="App-link"
+          href={`https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          See in Maps
+        </a>
       </header>
     </div>
   );
