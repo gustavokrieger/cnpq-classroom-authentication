@@ -1,0 +1,7 @@
+# Code editor
+.idea/
+.vscode/
+
+# Frontend
+/frontend/node_modules/
+/frontend/build/
