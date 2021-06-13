@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App(): JSX.Element {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [accuracy, setAccuracy] = useState(0);
+  const [ip, setIp] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch("https://api64.ipify.org");
+      setIp(await response.text());
+    })();
+  }, []);
 
   function positionCallback(position: GeolocationPosition): void {
     setLatitude(position.coords.latitude);
@@ -33,6 +41,8 @@ function App(): JSX.Element {
   return (
     <div className="App">
       <header className="App-header">
+        <p>IP: {ip}</p>
+        <p>-</p>
         <p>Latitude: {latitude}</p>
         <p>Longitude: {longitude}</p>
         <p>Accuracy: {accuracy}</p>
