@@ -29,12 +29,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-e9jl!l0qxk6wqbm3ix3u0a5(+3z@9%sj#%y$zl2#9avfpg44iu"
+SECRET_KEY = os.getenv(
+    "SECRET_KEY", "django-insecure-e9jl!l0qxk6wqbm3ix3u0a5(+3z@9%sj#%y$zl2#9avfpg44iu"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = (
+    allowed_hosts.split(",") if (allowed_hosts := os.getenv("ALLOWED_HOSTS")) else []
+)
 
 
 # Application definition
@@ -123,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "America/Sao_Paulo"
+TIME_ZONE = os.getenv("TIME_ZONE", "UTC")
 
 USE_I18N = True
 

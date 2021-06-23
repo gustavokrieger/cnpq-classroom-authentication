@@ -1,6 +1,15 @@
 version: "3.9"
 
 services:
+  backend:
+    build: ./backend
+    env_file:
+      - backend-variables.env
+    ports:
+      - "${BACKEND_HOST_IP}:${BACKEND_HOST_PORT}:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/usr/src/app
 
   frontend:
     build: ./frontend
