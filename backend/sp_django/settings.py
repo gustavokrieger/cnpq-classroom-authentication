@@ -16,7 +16,7 @@ from pathlib import Path
 import saml2.saml
 
 # configurações de ambiente
-DOMAIN = "dev.gidlab.rnp.br"
+DOMAIN = "sp-implicit.cafeexpresso.rnp.br"
 PORT = "8080"
 FQDN = "http://" + DOMAIN + ":" + PORT
 CERT_DIR = "certificates"
