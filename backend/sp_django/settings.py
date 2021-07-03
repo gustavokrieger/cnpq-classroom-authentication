@@ -16,7 +16,7 @@ import saml2
 import saml2.saml
 
 # configurações de ambiente
-DOMAIN = "sp-implicit.cafeexpresso.rnp.br"
+DOMAIN = os.getenv("DOMAIN", "localhost")
 PORT = "8080"
 FQDN = "http://" + DOMAIN + ":" + PORT
 CERT_DIR = "certificates"
