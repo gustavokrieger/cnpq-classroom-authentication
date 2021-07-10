@@ -50,8 +50,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "base.apps.BaseConfig",
     "djangosaml2",  # incluindo nova app djangosaml2
+    "rest_framework.authtoken",
+    "base.apps.BaseConfig",
 ]
 
 # Incluindo o backend de autenticação Saml2Backend
