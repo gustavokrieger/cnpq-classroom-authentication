@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.db import models
-from django.utils.timezone import now
+from django.utils import timezone
 from rest_framework.authtoken.models import Token
 
 from base.managers import TemporaryTokenManager
@@ -12,5 +12,5 @@ class TemporaryToken(Token):
 
     objects = TemporaryTokenManager()
 
-    def has_expired(self):
-        return now() > self.created + self.lifespan
+    def is_expired(self):
+        return timezone.now() > self.created + self.lifespan
