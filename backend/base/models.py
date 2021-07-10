@@ -8,9 +8,9 @@ from base.managers import TemporaryTokenManager
 
 
 class TemporaryToken(Token):
-    lifespan = models.DurationField(default=timedelta(seconds=900))
+    lifespan = models.DurationField(default=timedelta(seconds=300))
 
     objects = TemporaryTokenManager()
 
-    def is_expired(self):
+    def has_expired(self):
         return timezone.now() > self.created + self.lifespan

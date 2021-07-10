@@ -14,12 +14,16 @@ class TemporaryTokenCase(TestCase):
         user = User.objects.create_user(username="user")
         self.temporary_token = TemporaryToken.objects.create(user=user)
 
-    def test_has_not_expired(self):
-        now = self.temporary_token.created + timedelta(minutes=7)
-        with patch("django.utils.timezone.now", return_value=now):
-            self.assertFalse(self.temporary_token.is_expired())
+    @patch("django.utils.timezone.now")
+    def test_has_not_expired(self, mock_now):
+        mock_now.return_value = self.temporary_token.created
 
-    def test_has_expired(self):
-        now = self.temporary_token.created + timedelta(minutes=15, milliseconds=1)
-        with patch("django.utils.timezone.now", return_value=now):
-            self.assertTrue(self.temporary_token.is_expired())
+        self.assertFalse(self.temporary_token.has_expired())
+
+    @patch("django.utils.timezone.now")
+    def test_has_expired(self, mock_now):
+        mock_now.return_value = self.temporary_token.created + timedelta(
+            minutes=5, milliseconds=1
+        )
+
+        self.assertTrue(self.temporary_token.has_expired())
