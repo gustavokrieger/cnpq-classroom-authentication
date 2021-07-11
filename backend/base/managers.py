@@ -1,8 +1,6 @@
 from django.db import models
 from rest_framework.authtoken.models import Token
 
-from base.exceptions import InvalidTemporaryTokenError
-
 
 class TemporaryTokenManager(models.Manager):
     def create_or_replace(self, user):
@@ -11,6 +9,11 @@ class TemporaryTokenManager(models.Manager):
 
     def exchange(self, key):
         temporary_token = self.get(key=key)
-        if temporary_token.has_expired():
-            raise InvalidTemporaryTokenError("expired token")
-        return Token.objects.get_or_create(user=temporary_token.user)
+        temporary_token.check_if_valid()
+        return self._replace_with_permanent(temporary_token)
+
+    @staticmethod
+    def _replace_with_permanent(temporary_token):
+        user = temporary_token.user
+        temporary_token.delete()
+        return Token.objects.create(user=user)

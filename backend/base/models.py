@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from rest_framework.authtoken.models import Token
 
+from base.exceptions import InvalidTemporaryTokenError
 from base.managers import TemporaryTokenManager
 
 
@@ -12,5 +13,9 @@ class TemporaryToken(Token):
 
     objects = TemporaryTokenManager()
 
-    def has_expired(self):
+    def check_if_valid(self):
+        if self._has_expired():
+            raise InvalidTemporaryTokenError("expired token")
+
+    def _has_expired(self):
         return timezone.now() > self.created + self.lifespan
