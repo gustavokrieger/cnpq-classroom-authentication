@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "djangosaml2",  # incluindo nova app djangosaml2
+    "rest_framework",
     "rest_framework.authtoken",
     "base.apps.BaseConfig",
 ]

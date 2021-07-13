@@ -1,12 +1,15 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.utils.http import urlencode
-from django.views import View
+from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from base.models import TemporaryToken
+from base.serializers import TokenExchangeSerializer
 
 
 def index(request):
@@ -25,10 +28,17 @@ def users(request):
     return HttpResponse(template.render(meta, request))
 
 
-class TokenExchangeView(View):
+class TokenExchangeView(APIView):
     def post(self, request):
-        temporary_token_key = request.POST.get("temporary_token")
-        if not temporary_token_key:
-            return HttpResponseBadRequest('Missing "temporary_token" in POST data.')
+        serializer = TokenExchangeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        temporary_token_key = serializer.validated_data["temporary_token"]
         token = TemporaryToken.objects.exchange(temporary_token_key)
-        return HttpResponse(token)
+        return Response({"token": token.key})
+
+
+class Home(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        return Response({})

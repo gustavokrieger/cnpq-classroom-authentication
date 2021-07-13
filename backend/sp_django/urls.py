@@ -20,4 +20,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("base.urls", namespace="base")),
     path(r"saml2/", include("djangosaml2.urls")),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
 ]
