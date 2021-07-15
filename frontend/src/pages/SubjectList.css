@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.title-heading {
+  margin: 7rem;
+}
+
+.title-heading:first-letter {
+  text-transform: uppercase;
+}
+
+.list-heading:first-letter {
+  text-transform: uppercase;
+}
+
+.list-group {
+  width: 50%;
+}
+
+.list-group__item {
+  text-transform: capitalize;
+}
