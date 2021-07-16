@@ -6,11 +6,15 @@
 }
 
 .title-heading {
-  margin: 7rem;
+  margin: 6rem;
 }
 
 .title-heading:first-letter {
   text-transform: uppercase;
+}
+
+.list-heading {
+  margin: 2rem;
 }
 
 .list-heading:first-letter {

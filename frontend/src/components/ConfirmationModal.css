@@ -1,0 +1,11 @@
+.modal__title:first-letter {
+  text-transform: uppercase;
+}
+
+.modal__body:first-letter {
+  text-transform: uppercase;
+}
+
+.modal__button {
+  text-transform: capitalize;
+}

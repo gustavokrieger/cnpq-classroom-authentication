@@ -1,11 +1,16 @@
 import "./SubjectList.css";
+import { useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
-import { Container } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 export default function SubjectList(): JSX.Element {
-  function alertClicked() {
-    alert("You clicked the third ListGroupItem");
-  }
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const handleConfirmationAccept = () => {
+    setShowConfirmation(false);
+    // TODO: make request here.
+  };
 
   const items = [
     { subject: "materia 1", disabled: true },
@@ -18,7 +23,7 @@ export default function SubjectList(): JSX.Element {
       className="list-group__item"
       key={index}
       action
-      onClick={alertClicked}
+      onClick={() => setShowConfirmation(true)}
       disabled={value.disabled}
     >
       {value.subject}
@@ -27,6 +32,11 @@ export default function SubjectList(): JSX.Element {
 
   return (
     <>
+      <ConfirmationModal
+        show={showConfirmation}
+        handleClose={() => setShowConfirmation(false)}
+        handleAccept={handleConfirmationAccept}
+      />
       <Container className="container">
         <h1 className="title-heading">registro de presença</h1>
         <h5 className="list-heading text-muted">
