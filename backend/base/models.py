@@ -24,13 +24,17 @@ class TemporaryToken(Token):
         return timezone.now() > self.created + self.lifespan
 
 
-class CourseClass(models.Model):
-    users = models.ManyToManyField(User, related_name="course_classes", through="Presence")
-    course = models.CharField(max_length=50)
-    start = models.TimeField()
-    end = models.TimeField()
+class Course(models.Model):
+    users = models.ManyToManyField(User, related_name="courses")
+    name = models.CharField(max_length=50)
+
+
+class Lecture(models.Model):
+    course = models.ForeignKey(Course, models.PROTECT, related_name="lectures")
+    start = models.DateTimeField()
+    duration = models.DurationField()
 
 
 class Presence(models.Model):
-    user = models.ForeignKey(User, models.PROTECT)
-    course_class = models.ForeignKey(CourseClass, models.PROTECT)
+    user = models.ForeignKey(User, models.PROTECT, related_name="presences")
+    lecture = models.ForeignKey(Lecture, models.PROTECT, related_name="presences")
