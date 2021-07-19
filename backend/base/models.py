@@ -30,8 +30,19 @@ class Course(models.Model):
 
 
 class Lecture(models.Model):
+    # Indexes replicate those of datetime.
+    class Weekday(models.IntegerChoices):
+        MONDAY = 0
+        TUESDAY = 1
+        WEDNESDAY = 2
+        THURSDAY = 3
+        FRIDAY = 4
+        SATURDAY = 5
+        SUNDAY = 6
+
     course = models.ForeignKey(Course, models.PROTECT, related_name="lectures")
-    start = models.DateTimeField()
+    weekday = models.IntegerField(choices=Weekday.choices)
+    start = models.TimeField()
     duration = models.DurationField()
 
 
