@@ -1,15 +1,19 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.utils.http import urlencode
 from rest_framework import permissions
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from base.models import TemporaryToken
-from base.serializers import TokenExchangeSerializer
+from base.models import TemporaryToken, Lecture
+from base.serializers import TokenExchangeSerializer, LectureSerializer
+
+User = get_user_model()
 
 
 def index(request):
@@ -37,8 +41,7 @@ class TokenExchangeView(APIView):
         return Response({"token": token.key})
 
 
-class Home(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get(self, request):
-        return Response({})
+class LectureView(RetrieveAPIView):
+    queryset = Lecture.objects.all()
+    serializer_class = LectureSerializer
+    permission_classes = [permissions.IsAuthenticated]

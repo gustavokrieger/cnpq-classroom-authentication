@@ -265,3 +265,12 @@ SAML_CONFIG = {
         "url": [("http://gidlab.rnp.br", "pt-br")],
     },
 }
+
+
+# Rest framework
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ]
+}

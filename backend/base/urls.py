@@ -1,11 +1,12 @@
 from django.urls import path
 
-from . import views
+from base.views import index, users, TokenExchangeView, LectureView
 
 app_name = "base"
+
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("users/", views.users, name="users"),
-    path("token-exchange/", views.TokenExchangeView.as_view(), name="token-exchange"),
-    path("home/", views.Home.as_view(), name="home"),
+    path("", index, name="index"),
+    path("users/", users, name="users"),
+    path("token-exchange/", TokenExchangeView.as_view(), name="token-exchange"),
+    path("lecture/<int:pk>/", LectureView.as_view(), name="lecture"),
 ]
