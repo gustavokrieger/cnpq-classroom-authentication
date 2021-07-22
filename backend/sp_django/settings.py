@@ -21,6 +21,8 @@ PORT = "8080"
 FQDN = "http://" + DOMAIN + ":" + PORT
 CERT_DIR = "certificates"
 
+FRONTEND_URL = "http://" + DOMAIN + ":5000"
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,6 +43,15 @@ ALLOWED_HOSTS = (
 )
 
 
+# Configuração do CORS
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = [
+    FRONTEND_URL,
+]
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,6 +62,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "djangosaml2",  # incluindo nova app djangosaml2
+    "corsheaders",  # CORS
     "rest_framework",
     "rest_framework.authtoken",
     "base.apps.BaseConfig",
@@ -63,6 +75,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",  # CORS
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -165,7 +178,7 @@ SAML2_DISCO_URL = "https://ds.cafeexpresso.rnp.br/WAYF.php"
 SAML_CREATE_UNKNOWN_USER = True
 
 # URL para redirecionamento após a autenticação
-LOGIN_REDIRECT_URL = "/users"
+LOGIN_REDIRECT_URL = FRONTEND_URL
 
 # Mapeamento de atributos de usuário SAML2 para atributos de usuário Django
 SAML_ATTRIBUTE_MAPPING = {
@@ -271,6 +284,7 @@ SAML_CONFIG = {
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ]
 }
