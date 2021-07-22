@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from base.models import TemporaryToken, Lecture
-from base.serializers import TokenExchangeSerializer, LectureSerializer
+from base.serializers import TokenExchangeSerializer, LectureSerializer, UserSerializer
 
 User = get_user_model()
 
@@ -39,6 +39,14 @@ class TokenExchangeView(APIView):
         temporary_token_key = serializer.validated_data["temporary_token"]
         token = TemporaryToken.objects.exchange(temporary_token_key)
         return Response({"token": token.key})
+
+
+class UserView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
 
 
 class LectureView(RetrieveAPIView):
