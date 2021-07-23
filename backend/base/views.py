@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from django.utils.http import urlencode
 from rest_framework import permissions
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -49,7 +49,11 @@ class UserView(APIView):
         return Response(serializer.data)
 
 
-class LectureView(RetrieveAPIView):
-    queryset = Lecture.objects.all()
+class LectureView(ListAPIView):
     serializer_class = LectureSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Lecture.objects.filter(
+            course__users=self.request.user,
+        ).select_related("course")

@@ -9,5 +9,5 @@ urlpatterns = [
     path("users/", users, name="users"),
     path("token-exchange/", TokenExchangeView.as_view(), name="token-exchange"),
     path("user/", UserView.as_view(), name="user"),
-    path("lecture/<int:pk>/", LectureView.as_view(), name="lecture"),
+    path("lectures/", LectureView.as_view(), name="lectures"),
 ]
