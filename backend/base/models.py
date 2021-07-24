@@ -28,6 +28,9 @@ class Course(models.Model):
     users = models.ManyToManyField(User, related_name="courses")
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.name
+
 
 class Lecture(models.Model):
     # Indexes replicate those of datetime.
@@ -41,13 +44,23 @@ class Lecture(models.Model):
         SUNDAY = 6
 
     course = models.ForeignKey(Course, models.PROTECT, related_name="lectures")
+    presences = models.ManyToManyField(
+        User, related_name="presences", through="Presence"
+    )
     weekday = models.IntegerField(choices=Weekday.choices)
     start = models.TimeField()
     duration = models.DurationField()
 
     objects = LectureQuerySet.as_manager()
 
+    def __str__(self):
+        return f"{self.get_weekday_display()}, {self.start}"
+
 
 class Presence(models.Model):
-    user = models.ForeignKey(User, models.PROTECT, related_name="presences")
-    lecture = models.ForeignKey(Lecture, models.PROTECT, related_name="presences")
+    user = models.ForeignKey(User, models.PROTECT)
+    lecture = models.ForeignKey(Lecture, models.PROTECT)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.created)
