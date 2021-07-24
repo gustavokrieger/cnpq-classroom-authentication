@@ -17,3 +17,8 @@ class TemporaryTokenManager(models.Manager):
         user = temporary_token.user
         temporary_token.delete()
         return Token.objects.create(user=user)
+
+
+class LectureQuerySet(models.QuerySet):
+    def of_courses(self, courses):
+        return self.filter(course__in=courses)

@@ -54,6 +54,5 @@ class LectureView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Lecture.objects.filter(
-            course__users=self.request.user,
-        ).select_related("course")
+        user_courses = self.request.user.courses.all()
+        return Lecture.objects.of_courses(user_courses).select_related("course")

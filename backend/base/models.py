@@ -6,7 +6,7 @@ from django.utils import timezone
 from rest_framework.authtoken.models import Token
 
 from base.exceptions import InvalidTemporaryTokenError
-from base.managers import TemporaryTokenManager
+from base.managers import TemporaryTokenManager, LectureQuerySet
 
 User = get_user_model()
 
@@ -44,6 +44,8 @@ class Lecture(models.Model):
     weekday = models.IntegerField(choices=Weekday.choices)
     start = models.TimeField()
     duration = models.DurationField()
+
+    objects = LectureQuerySet.as_manager()
 
 
 class Presence(models.Model):
