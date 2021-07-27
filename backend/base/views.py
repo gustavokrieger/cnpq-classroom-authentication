@@ -5,10 +5,10 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.utils.http import urlencode
-from rest_framework import permissions
-from rest_framework.generics import ListAPIView
+from rest_framework import permissions, mixins
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 from base.models import TemporaryToken, Lecture
 from base.serializers import TokenExchangeSerializer, LectureSerializer, UserSerializer
@@ -49,7 +49,7 @@ class UserView(APIView):
         return Response(serializer.data)
 
 
-class LectureView(ListAPIView):
+class LectureViewSet(mixins.ListModelMixin, GenericViewSet):
     serializer_class = LectureSerializer
     permission_classes = [permissions.IsAuthenticated]
 
