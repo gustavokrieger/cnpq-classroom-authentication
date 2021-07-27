@@ -55,4 +55,4 @@ class LectureView(ListAPIView):
 
     def get_queryset(self):
         user_courses = self.request.user.courses.all()
-        return Lecture.objects.of_courses(user_courses).select_related("course")
+        return Lecture.objects.for_courses(user_courses).select_related("course")

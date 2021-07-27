@@ -20,5 +20,5 @@ class TemporaryTokenManager(models.Manager):
 
 
 class LectureQuerySet(models.QuerySet):
-    def of_courses(self, courses):
+    def for_courses(self, courses):
         return self.filter(course__in=courses)
