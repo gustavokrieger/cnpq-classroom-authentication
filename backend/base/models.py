@@ -44,8 +44,8 @@ class Lecture(models.Model):
         SUNDAY = 6
 
     course = models.ForeignKey(Course, models.PROTECT, related_name="lectures")
-    presences = models.ManyToManyField(
-        User, related_name="presences", through="Presence"
+    attendances = models.ManyToManyField(
+        User, related_name="attendances", through="Attendance"
     )
     weekday = models.IntegerField(choices=Weekday.choices)
     start = models.TimeField()
@@ -57,7 +57,7 @@ class Lecture(models.Model):
         return f"{self.get_weekday_display()}, {self.start}"
 
 
-class Presence(models.Model):
+class Attendance(models.Model):
     user = models.ForeignKey(User, models.PROTECT)
     lecture = models.ForeignKey(Lecture, models.PROTECT)
     created = models.DateTimeField(auto_now_add=True)
