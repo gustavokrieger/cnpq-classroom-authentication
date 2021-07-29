@@ -22,3 +22,10 @@ class TemporaryTokenManager(models.Manager):
 class LectureQuerySet(models.QuerySet):
     def for_courses(self, courses):
         return self.filter(course__in=courses)
+
+
+class AttendanceQuerySet(models.QuerySet):
+    def register(self, user, lecture):
+        if not lecture.is_ongoing():
+            raise RuntimeError
+        return self.create(user=user, lecture=lecture)

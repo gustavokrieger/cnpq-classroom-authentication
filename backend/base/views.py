@@ -6,11 +6,12 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from django.utils.http import urlencode
 from rest_framework import permissions, mixins
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from base.models import TemporaryToken, Lecture
+from base.models import TemporaryToken, Lecture, Attendance
 from base.serializers import TokenExchangeSerializer, LectureSerializer, UserSerializer
 
 User = get_user_model()
@@ -56,3 +57,9 @@ class LectureViewSet(mixins.ListModelMixin, GenericViewSet):
     def get_queryset(self):
         user_courses = self.request.user.courses.all()
         return Lecture.objects.for_courses(user_courses).select_related("course")
+
+    @action(methods=["post"], detail=True)
+    def attend(self, request, pk=None):
+        instance = self.get_object()
+        Attendance.objects.register(request.user, instance)
+        return Response({"status": "attendance registered"})

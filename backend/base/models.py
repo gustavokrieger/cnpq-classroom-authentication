@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -6,7 +6,7 @@ from django.utils import timezone
 from rest_framework.authtoken.models import Token
 
 from base.exceptions import InvalidTemporaryTokenError
-from base.managers import TemporaryTokenManager, LectureQuerySet
+from base.managers import TemporaryTokenManager, LectureQuerySet, AttendanceQuerySet
 
 User = get_user_model()
 
@@ -56,11 +56,23 @@ class Lecture(models.Model):
     def __str__(self):
         return f"{self.get_weekday_display()}, {self.start}"
 
+    def is_ongoing(self):
+        now = datetime.now()
+        if now.weekday() != self.weekday:
+            return False
+        start = datetime.combine(now.date(), self.start)
+        end = start + self.duration
+        if start <= now < end:
+            return True
+        return False
+
 
 class Attendance(models.Model):
     user = models.ForeignKey(User, models.PROTECT)
     lecture = models.ForeignKey(Lecture, models.PROTECT)
     created = models.DateTimeField(auto_now_add=True)
+
+    objects = AttendanceQuerySet.as_manager()
 
     def __str__(self):
         return str(self.created)
