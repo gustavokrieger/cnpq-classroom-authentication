@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class LectureSerializer(serializers.ModelSerializer):
     course = serializers.ReadOnlyField(source="course.name")
-    weekday = serializers.CharField(source="get_weekday_display")
+    weekday = serializers.ReadOnlyField(source="get_weekday_display")
 
     class Meta:
         model = Lecture
