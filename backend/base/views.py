@@ -12,7 +12,12 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from base.models import TemporaryToken, Lecture, Attendance
-from base.serializers import TokenExchangeSerializer, LectureSerializer, UserSerializer
+from base.serializers import (
+    TokenExchangeSerializer,
+    UserSerializer,
+    LectureSerializer,
+    LectureAttendanceSerializer,
+)
 
 User = get_user_model()
 
@@ -57,6 +62,14 @@ class LectureViewSet(mixins.ListModelMixin, GenericViewSet):
     def get_queryset(self):
         user_courses = self.request.user.courses.all()
         return Lecture.objects.for_courses(user_courses).select_related("course")
+
+    # TODO: filter to only show the lectures of the day.
+    @action(detail=False)
+    def today(self, request):
+        queryset = self.get_queryset()
+        context = {"request": request}
+        serializer = LectureAttendanceSerializer(queryset, many=True, context=context)
+        return Response(serializer.data)
 
     @action(methods=["post"], detail=True)
     def attend(self, request, pk=None):

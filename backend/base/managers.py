@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.db import models
 from rest_framework.authtoken.models import Token
 
@@ -29,3 +31,6 @@ class AttendanceQuerySet(models.QuerySet):
         if not lecture.is_ongoing():
             raise RuntimeError
         return self.create(user=user, lecture=lecture)
+
+    def has_registered_today(self, user, lecture):
+        return self.filter(user=user, lecture=lecture, created=date.today()).exists()

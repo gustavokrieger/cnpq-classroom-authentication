@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from base.models import Lecture
+from base.models import Lecture, Attendance
 
 User = get_user_model()
 
@@ -22,4 +22,15 @@ class LectureSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lecture
-        fields = ["id", "course", "weekday", "start", "duration", "is_ongoing"]
+        fields = ["id", "course", "weekday", "start", "duration"]
+
+
+class LectureAttendanceSerializer(LectureSerializer):
+    has_registered_today = serializers.SerializerMethodField()
+
+    class Meta(LectureSerializer.Meta):
+        fields = LectureSerializer.Meta.fields + ["is_ongoing", "has_registered_today"]
+
+    def get_has_registered_today(self, obj):
+        user = self.context["request"].user
+        return Attendance.objects.has_registered_today(user, obj)
