@@ -7,6 +7,7 @@ import ConfirmationModal from "../components/ConfirmationModal";
 interface Lecture {
   course: string;
   is_ongoing: boolean;
+  has_registered_today: boolean;
 }
 
 export default function SubjectList(): JSX.Element {
@@ -14,29 +15,59 @@ export default function SubjectList(): JSX.Element {
   const [lectures, setLectures] = useState<readonly Lecture[]>([]);
 
   useEffect(() => {
-    (async () => {
-      const init = {
-        headers: {
-          Authorization: "Token f1889b9a70431f0c285230272163af0a61d2916e",
-        },
-      };
-      const response = await fetch("http://127.0.0.1:8000/api/lectures/", init);
-      setLectures(await response.json());
-    })();
+    loadLectures();
   }, []);
 
-  const handleConfirmationAccept = () => {
+  const loadLectures = async () => {
+    const init = {
+      headers: {
+        Authorization: "Token 97a17b6999bb1c0a9cb5b6da2461850a76455624",
+      },
+    };
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/lectures/today/",
+      init
+    );
+    setLectures(await response.json());
+  };
+
+  const handleConfirmationAccept = async () => {
     setShowConfirmation(false);
-    // TODO: make request here.
+    await attendLecture();
+    await loadLectures();
+  };
+
+  const attendLecture = async () => {
+    const init = {
+      method: "POST",
+      headers: {
+        Authorization: "Token 97a17b6999bb1c0a9cb5b6da2461850a76455624",
+      },
+    };
+    await fetch("http://127.0.0.1:8000/api/lectures/2/attend/", init);
+  };
+
+  const getListGroupProps = (lecture: Lecture) => {
+    if (lecture.has_registered_today) {
+      return {
+        variant: "success",
+      };
+    }
+    if (lecture.is_ongoing) {
+      return {
+        action: true,
+        onClick: () => setShowConfirmation(true),
+        active: true,
+      };
+    }
+    return {};
   };
 
   const ListGroupItems = lectures.map((v, i) => (
     <ListGroup.Item
       className="list-group__item"
       key={i}
-      action
-      onClick={() => setShowConfirmation(true)}
-      disabled={!v.is_ongoing}
+      {...getListGroupProps(v)}
     >
       {v.course}
     </ListGroup.Item>
