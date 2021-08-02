@@ -6,7 +6,12 @@ from django.utils import timezone
 from rest_framework.authtoken.models import Token
 
 from base.exceptions import InvalidTemporaryTokenError
-from base.managers import TemporaryTokenManager, LectureQuerySet, AttendanceQuerySet
+from base.managers import (
+    TemporaryTokenManager,
+    LectureQuerySet,
+    AttendanceManager,
+    AttendanceQuerySet,
+)
 
 User = get_user_model()
 
@@ -79,7 +84,7 @@ class Attendance(models.Model):
     lecture = models.ForeignKey(Lecture, models.PROTECT)
     created = models.DateField(auto_now_add=True)
 
-    objects = AttendanceQuerySet.as_manager()
+    objects = AttendanceManager.from_queryset(AttendanceQuerySet)()
 
     class Meta:
         constraints = [

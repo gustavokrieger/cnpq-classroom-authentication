@@ -33,4 +33,4 @@ class LectureAttendanceSerializer(LectureSerializer):
 
     def get_has_registered_today(self, obj):
         user = self.context["request"].user
-        return Attendance.objects.has_registered_today(user, obj)
+        return Attendance.objects.registered_today(user, obj).exists()

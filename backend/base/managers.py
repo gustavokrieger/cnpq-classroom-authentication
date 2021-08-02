@@ -26,11 +26,13 @@ class LectureQuerySet(models.QuerySet):
         return self.filter(course__in=courses)
 
 
-class AttendanceQuerySet(models.QuerySet):
+class AttendanceManager(models.Manager):
     def register(self, user, lecture):
         if not lecture.is_ongoing():
             raise RuntimeError
         return self.create(user=user, lecture=lecture)
 
-    def has_registered_today(self, user, lecture):
-        return self.filter(user=user, lecture=lecture, created=date.today()).exists()
+
+class AttendanceQuerySet(models.QuerySet):
+    def registered_today(self, user, lecture):
+        return self.filter(user=user, lecture=lecture, created=date.today())
