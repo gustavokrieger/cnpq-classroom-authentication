@@ -26,7 +26,7 @@ class TemporaryToken(Token):
 
 class Course(models.Model):
     users = models.ManyToManyField(User, related_name="courses")
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.name
@@ -53,6 +53,13 @@ class Lecture(models.Model):
 
     objects = LectureQuerySet.as_manager()
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["course", "weekday"], name="unique_course_lecture_per_weekday"
+            ),
+        ]
+
     def __str__(self):
         return f"{self.get_weekday_display()}, {self.start}"
 
@@ -70,9 +77,16 @@ class Lecture(models.Model):
 class Attendance(models.Model):
     user = models.ForeignKey(User, models.PROTECT)
     lecture = models.ForeignKey(Lecture, models.PROTECT)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateField(auto_now_add=True)
 
     objects = AttendanceQuerySet.as_manager()
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "lecture", "created"], name="unique_attendance_per_day"
+            ),
+        ]
 
     def __str__(self):
         return str(self.created)
