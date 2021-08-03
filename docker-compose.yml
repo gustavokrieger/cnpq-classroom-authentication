@@ -1,8 +1,21 @@
 version: "3.9"
 
 services:
+  db:
+    image: postgres:13.3
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+    ports:
+      - "${DB_HOST_IP}:${DB_HOST_PORT}:5432"
+
   backend:
     build: ./backend
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
     env_file:
       - backend-variables.env
     ports:
@@ -10,6 +23,8 @@ services:
     command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend:/usr/src/app
+    depends_on:
+      - db
 
   frontend:
     build: ./frontend
