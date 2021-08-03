@@ -7,7 +7,7 @@ import ConfirmationModal from "../components/ConfirmationModal";
 interface Lecture {
   course: string;
   is_ongoing: boolean;
-  has_registered_today: boolean;
+  has_attended: boolean;
 }
 
 export default function SubjectList(): JSX.Element {
@@ -20,9 +20,9 @@ export default function SubjectList(): JSX.Element {
 
   const loadLectures = async () => {
     const init = {
-      headers: {
-        Authorization: "Token 97a17b6999bb1c0a9cb5b6da2461850a76455624",
-      },
+      // headers: {
+      //   Authorization: "Token 2e04e73c8aae8333968fd707bb4b5d76412671fa",
+      // },
     };
     const response = await fetch(
       "http://127.0.0.1:8000/api/lectures/today/",
@@ -40,15 +40,15 @@ export default function SubjectList(): JSX.Element {
   const attendLecture = async () => {
     const init = {
       method: "POST",
-      headers: {
-        Authorization: "Token 97a17b6999bb1c0a9cb5b6da2461850a76455624",
-      },
+      // headers: {
+      //   Authorization: "Token 2e04e73c8aae8333968fd707bb4b5d76412671fa",
+      // },
     };
     await fetch("http://127.0.0.1:8000/api/lectures/2/attend/", init);
   };
 
   const getListGroupProps = (lecture: Lecture) => {
-    if (lecture.has_registered_today) {
+    if (lecture.has_attended) {
       return {
         variant: "success",
       };
