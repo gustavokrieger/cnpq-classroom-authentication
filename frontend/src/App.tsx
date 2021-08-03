@@ -6,11 +6,11 @@ export default function App(): JSX.Element {
   return (
     <Router>
       <Switch>
-        <Route path="/presence">
-          <SubjectList />
+        <Route path="/coordinates">
+          <Home />
         </Route>
         <Route path="/">
-          <Home />
+          <SubjectList />
         </Route>
       </Switch>
     </Router>
