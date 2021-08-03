@@ -3,11 +3,12 @@ from datetime import date
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.utils.http import urlencode
-from rest_framework import permissions, mixins
+from rest_framework import permissions, mixins, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -76,5 +77,11 @@ class LectureViewSet(mixins.ListModelMixin, GenericViewSet):
     @action(methods=["post"], detail=True)
     def attend(self, request, pk=None):
         instance = self.get_object()
-        Attendance.objects.register(request.user, instance)
+        try:
+            Attendance.objects.register(request.user, instance)
+        except IntegrityError:
+            return Response(
+                {"status": "attendance already registered today"},
+                status=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            )
         return Response({"status": "attendance registered"})
