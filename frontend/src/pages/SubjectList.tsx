@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import ConfirmationModal from "../components/ConfirmationModal";
 
 interface Lecture {
+  id: number;
   course: string;
   is_ongoing: boolean;
   has_attended: boolean;
@@ -13,6 +14,7 @@ interface Lecture {
 export default function SubjectList(): JSX.Element {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [lectures, setLectures] = useState<readonly Lecture[]>([]);
+  const [selectedLectureId, setSelectedLectureId] = useState(0);
 
   useEffect(() => {
     loadLectures();
@@ -20,9 +22,9 @@ export default function SubjectList(): JSX.Element {
 
   const loadLectures = async () => {
     const init = {
-      // headers: {
-      //   Authorization: "Token 2e04e73c8aae8333968fd707bb4b5d76412671fa",
-      // },
+      headers: {
+        Authorization: "Token 96558d56f429188c4ba843bec4d53f8391cacf0a",
+      },
     };
     const response = await fetch(
       "http://127.0.0.1:8000/api/lectures/today/",
@@ -40,11 +42,14 @@ export default function SubjectList(): JSX.Element {
   const attendLecture = async () => {
     const init = {
       method: "POST",
-      // headers: {
-      //   Authorization: "Token 2e04e73c8aae8333968fd707bb4b5d76412671fa",
-      // },
+      headers: {
+        Authorization: "Token 96558d56f429188c4ba843bec4d53f8391cacf0a",
+      },
     };
-    await fetch("http://127.0.0.1:8000/api/lectures/2/attend/", init);
+    await fetch(
+      `http://127.0.0.1:8000/api/lectures/${selectedLectureId}/attend/`,
+      init
+    );
   };
 
   const getListGroupProps = (lecture: Lecture) => {
@@ -56,14 +61,19 @@ export default function SubjectList(): JSX.Element {
     if (lecture.is_ongoing) {
       return {
         action: true,
-        onClick: () => setShowConfirmation(true),
+        onClick: () => handleListGroupItemClick(lecture.id),
         active: true,
       };
     }
     return {};
   };
 
-  const ListGroupItems = lectures.map((v, i) => (
+  const handleListGroupItemClick = (lectureId: number) => {
+    setShowConfirmation(true);
+    setSelectedLectureId(lectureId);
+  };
+
+  const listGroupItems = lectures.map((v, i) => (
     <ListGroup.Item
       className="list-group__item"
       key={i}
@@ -85,7 +95,7 @@ export default function SubjectList(): JSX.Element {
         <h5 className="list-heading text-muted">
           selecione disciplina para registrar presença.
         </h5>
-        <ListGroup className="list-group">{ListGroupItems}</ListGroup>
+        <ListGroup className="list-group">{listGroupItems}</ListGroup>
       </Container>
     </>
   );
