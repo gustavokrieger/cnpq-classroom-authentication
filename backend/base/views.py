@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -63,10 +65,10 @@ class LectureViewSet(mixins.ListModelMixin, GenericViewSet):
         user_courses = self.request.user.courses.all()
         return Lecture.objects.for_courses(user_courses).select_related("course")
 
-    # TODO: filter to only show the lectures of the day.
     @action(detail=False)
     def today(self, request):
-        queryset = self.get_queryset()
+        weekday = date.today().weekday()
+        queryset = self.get_queryset().on_weekday(weekday)
         context = {"request": request}
         serializer = LectureAttendanceSerializer(queryset, many=True, context=context)
         return Response(serializer.data)

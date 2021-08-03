@@ -28,12 +28,12 @@ class LectureSerializer(serializers.ModelSerializer):
 
 
 class LectureAttendanceSerializer(LectureSerializer):
-    has_registered_today = serializers.SerializerMethodField()
+    has_attended = serializers.SerializerMethodField()
 
     class Meta(LectureSerializer.Meta):
-        fields = LectureSerializer.Meta.fields + ["is_ongoing", "has_registered_today"]
+        fields = LectureSerializer.Meta.fields + ["is_ongoing", "has_attended"]
 
-    def get_has_registered_today(self, obj):
+    def get_has_attended(self, obj):
         user = self.context["request"].user
         today = date.today()
         queryset = (

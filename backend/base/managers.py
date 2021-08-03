@@ -23,6 +23,9 @@ class LectureQuerySet(models.QuerySet):
     def for_courses(self, courses):
         return self.filter(course__in=courses)
 
+    def on_weekday(self, weekday):
+        return self.filter(weekday=weekday)
+
 
 class AttendanceManager(models.Manager):
     def register(self, user, lecture):
