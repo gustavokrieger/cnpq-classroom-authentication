@@ -82,16 +82,17 @@ class Lecture(models.Model):
 class Attendance(models.Model):
     user = models.ForeignKey(User, models.PROTECT)
     lecture = models.ForeignKey(Lecture, models.PROTECT)
-    created = models.DateField(auto_now_add=True)
+    registered = models.DateField(auto_now_add=True)
 
     objects = AttendanceManager.from_queryset(AttendanceQuerySet)()
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["user", "lecture", "created"], name="unique_attendance_per_day"
+                fields=["user", "lecture", "registered"],
+                name="unique_attendance_per_day",
             ),
         ]
 
     def __str__(self):
-        return str(self.created)
+        return str(self.registered)

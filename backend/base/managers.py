@@ -1,5 +1,3 @@
-from datetime import date
-
 from django.db import models
 from rest_framework.authtoken.models import Token
 
@@ -34,5 +32,11 @@ class AttendanceManager(models.Manager):
 
 
 class AttendanceQuerySet(models.QuerySet):
-    def registered_today(self, user, lecture):
-        return self.filter(user=user, lecture=lecture, created=date.today())
+    def for_user(self, user):
+        return self.filter(user=user)
+
+    def for_lecture(self, lecture):
+        return self.filter(lecture=lecture)
+
+    def registered_on(self, date):
+        return self.filter(registered=date)

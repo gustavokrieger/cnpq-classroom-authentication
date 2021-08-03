@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -33,4 +35,8 @@ class LectureAttendanceSerializer(LectureSerializer):
 
     def get_has_registered_today(self, obj):
         user = self.context["request"].user
-        return Attendance.objects.registered_today(user, obj).exists()
+        today = date.today()
+        queryset = (
+            Attendance.objects.for_user(user).for_lecture(obj).registered_on(today)
+        )
+        return queryset.exists()
