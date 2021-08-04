@@ -16,6 +16,7 @@ services:
       - POSTGRES_DB
       - POSTGRES_USER
       - POSTGRES_PASSWORD
+      - BACKEND_HOST_PORT
     env_file:
       - backend-variables.env
     ports:

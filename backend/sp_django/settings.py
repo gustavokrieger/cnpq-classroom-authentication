@@ -17,7 +17,7 @@ import saml2.saml
 
 # configurações de ambiente
 DOMAIN = os.getenv("DOMAIN", "localhost")
-PORT = "8080"
+PORT = os.getenv("BACKEND_HOST_PORT", "8000")
 FQDN = "http://" + DOMAIN + ":" + PORT
 CERT_DIR = "certificates"
 
