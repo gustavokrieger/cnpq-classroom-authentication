@@ -15,11 +15,11 @@ export default function Home(): JSX.Element {
   useEffect(() => {
     (async () => {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/lectures/today/",
+        "http://127.0.0.1:8080/api/lectures/today/",
         { credentials: "include" }
       );
       if (response.status === 403) {
-        window.location.replace("http://127.0.0.1:8000/saml2/login/");
+        window.location.replace("http://127.0.0.1:8080/saml2/login/");
       }
       setUser(await response.json());
     })();

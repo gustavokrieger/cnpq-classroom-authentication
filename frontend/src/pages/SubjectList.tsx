@@ -27,7 +27,7 @@ export default function SubjectList(): JSX.Element {
       // },
     };
     const response = await fetch(
-      "http://127.0.0.1:8000/api/lectures/today/",
+      "http://127.0.0.1:8080/api/lectures/today/",
       init
     );
     setLectures(await response.json());
@@ -47,7 +47,7 @@ export default function SubjectList(): JSX.Element {
       // },
     };
     await fetch(
-      `http://127.0.0.1:8000/api/lectures/${selectedLectureId}/attend/`,
+      `http://127.0.0.1:8080/api/lectures/${selectedLectureId}/attend/`,
       init
     );
   };
