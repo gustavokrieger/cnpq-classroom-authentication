@@ -1,8 +1,8 @@
-import "./Home.css";
+import "./Coordinates.css";
 import { useEffect, useState } from "react";
 import Profile from "../components/Profile";
 
-export default function Home(): JSX.Element {
+export default function Coordinates(): JSX.Element {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [accuracy, setAccuracy] = useState(0);
