@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import SubjectList from "./pages/SubjectList";
 import Coordinates from "./pages/Coordinates";
+import Home from "./pages/Home";
 
 export default function App(): JSX.Element {
   return (
@@ -10,7 +10,7 @@ export default function App(): JSX.Element {
           <Coordinates />
         </Route>
         <Route path="/">
-          <SubjectList />
+          <Home />
         </Route>
       </Switch>
     </Router>

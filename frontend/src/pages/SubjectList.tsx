@@ -22,9 +22,9 @@ export default function SubjectList(): JSX.Element {
 
   const loadLectures = async () => {
     const init = {
-      headers: {
-        Authorization: "Token 96558d56f429188c4ba843bec4d53f8391cacf0a",
-      },
+      // headers: {
+      //   Authorization: "Token 96558d56f429188c4ba843bec4d53f8391cacf0a",
+      // },
     };
     const response = await fetch(
       "http://127.0.0.1:8000/api/lectures/today/",
@@ -42,9 +42,9 @@ export default function SubjectList(): JSX.Element {
   const attendLecture = async () => {
     const init = {
       method: "POST",
-      headers: {
-        Authorization: "Token 96558d56f429188c4ba843bec4d53f8391cacf0a",
-      },
+      // headers: {
+      //   Authorization: "Token 96558d56f429188c4ba843bec4d53f8391cacf0a",
+      // },
     };
     await fetch(
       `http://127.0.0.1:8000/api/lectures/${selectedLectureId}/attend/`,
