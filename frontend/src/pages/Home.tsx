@@ -15,12 +15,12 @@ export default function Home(): JSX.Element {
   useEffect(() => {
     (async () => {
       const response = await fetch(
-        `http://${process.env.DOMAIN}:${process.env.BACKEND_HOST_PORT}/api/lectures/today/`,
+        `http://${process.env.REACT_APP_BACKEND_DOMAIN}:${process.env.REACT_APP_BACKEND_PORT}/api/lectures/today/`,
         { credentials: "include" }
       );
       if (response.status === 403) {
         window.location.replace(
-          `http://${process.env.DOMAIN}:${process.env.BACKEND_HOST_PORT}/saml2/login/`
+          `http://${process.env.REACT_APP_BACKEND_DOMAIN}:${process.env.REACT_APP_BACKEND_PORT}/saml2/login/`
         );
       }
       setUser(await response.json());

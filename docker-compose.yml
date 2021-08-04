@@ -31,8 +31,8 @@ services:
   frontend:
     build: ./frontend
     environment:
-      - DOMAIN
-      - BACKEND_HOST_PORT
+      - REACT_APP_BACKEND_DOMAIN=${DOMAIN}
+      - REACT_APP_BACKEND_PORT=${BACKEND_HOST_PORT}
     ports:
       - "${FRONTEND_HOST_IP}:${FRONTEND_HOST_PORT}:5000"
     command: sh -c "yarn build && yarn serve -s -n build"

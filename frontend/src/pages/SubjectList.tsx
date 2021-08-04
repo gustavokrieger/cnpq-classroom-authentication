@@ -27,7 +27,7 @@ export default function SubjectList(): JSX.Element {
       // },
     };
     const response = await fetch(
-      `http://${process.env.DOMAIN}:${process.env.BACKEND_HOST_PORT}/api/lectures/today/`,
+      `http://${process.env.REACT_APP_BACKEND_DOMAIN}:${process.env.REACT_APP_BACKEND_PORT}/api/lectures/today/`,
       init
     );
     setLectures(await response.json());
@@ -47,7 +47,7 @@ export default function SubjectList(): JSX.Element {
       // },
     };
     await fetch(
-      `http://${process.env.DOMAIN}:${process.env.BACKEND_HOST_PORT}/api/lectures/${selectedLectureId}/attend/`,
+      `http://${process.env.REACT_APP_BACKEND_DOMAIN}:${process.env.REACT_APP_BACKEND_PORT}/api/lectures/${selectedLectureId}/attend/`,
       init
     );
   };
