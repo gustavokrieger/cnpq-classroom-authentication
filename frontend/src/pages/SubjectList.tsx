@@ -94,10 +94,18 @@ export default function SubjectList(): JSX.Element {
       />
       <Container className="container">
         <h1 className="title-heading">registro de presença</h1>
-        <h5 className="list-heading text-muted">
-          selecione disciplina para registrar presença.
-        </h5>
-        <ListGroup className="list-group">{listGroupItems}</ListGroup>
+        {lectures.length === 0 ? (
+          <h5 className="list-heading text-muted">
+            não há aulas para registrar presença.
+          </h5>
+        ) : (
+          <>
+            <h5 className="list-heading text-muted">
+              selecione aula para registrar presença.
+            </h5>
+            <ListGroup className="list-group">{listGroupItems}</ListGroup>
+          </>
+        )}
       </Container>
     </>
   );
