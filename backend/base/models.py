@@ -1,6 +1,7 @@
 from datetime import timedelta, datetime
 
-from django.contrib.auth import get_user_model
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 from rest_framework.authtoken.models import Token
@@ -13,7 +14,10 @@ from base.managers import (
     AttendanceQuerySet,
 )
 
-User = get_user_model()
+
+# https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#using-a-custom-user-model-when-starting-a-project
+class User(AbstractUser):
+    pass
 
 
 class TemporaryToken(Token):
@@ -30,7 +34,7 @@ class TemporaryToken(Token):
 
 
 class Course(models.Model):
-    users = models.ManyToManyField(User, related_name="courses")
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="courses")
     name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
@@ -50,7 +54,7 @@ class Lecture(models.Model):
 
     course = models.ForeignKey(Course, models.PROTECT, related_name="lectures")
     attendances = models.ManyToManyField(
-        User, related_name="attendances", through="Attendance"
+        settings.AUTH_USER_MODEL, related_name="attendances", through="Attendance"
     )
     weekday = models.IntegerField(choices=Weekday.choices)
     start = models.TimeField()
@@ -80,7 +84,7 @@ class Lecture(models.Model):
 
 
 class Attendance(models.Model):
-    user = models.ForeignKey(User, models.PROTECT)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, models.PROTECT)
     lecture = models.ForeignKey(Lecture, models.PROTECT)
     registered = models.DateField(auto_now_add=True)
 
