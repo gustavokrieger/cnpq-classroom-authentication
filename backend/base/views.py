@@ -14,9 +14,18 @@ from base.serializers import (
     UserSerializer,
     LectureSerializer,
     LectureAttendanceSerializer,
+    PositionSerializer,
 )
 
 User = get_user_model()
+
+
+class UserView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
 
 
 class TokenExchangeView(APIView):
@@ -28,12 +37,16 @@ class TokenExchangeView(APIView):
         return Response({"token": token.key})
 
 
-class UserView(APIView):
+class PositionViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
+    serializer_class = PositionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
-        serializer = UserSerializer(request.user)
-        return Response(serializer.data)
+    def get_queryset(self):
+        return self.request.user.positions.all()
 
 
 class LectureViewSet(mixins.ListModelMixin, GenericViewSet):

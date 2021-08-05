@@ -33,6 +33,22 @@ class TemporaryToken(Token):
         return timezone.now() > self.created + self.lifespan
 
 
+class Position(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, models.PROTECT, related_name="positions"
+    )
+    ip = models.GenericIPAddressField()
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created"]
+
+    def __str__(self):
+        return str(self.created)
+
+
 class Course(models.Model):
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="courses")
     name = models.CharField(max_length=50, unique=True)
