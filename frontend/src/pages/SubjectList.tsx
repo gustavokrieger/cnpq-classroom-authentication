@@ -21,7 +21,8 @@ export default function SubjectList(): JSX.Element {
   }, []);
 
   const loadLectures = async () => {
-    const init = {
+    const init: RequestInit = {
+      credentials: "include",
       // headers: {
       //   Authorization: "Token 96558d56f429188c4ba843bec4d53f8391cacf0a",
       // },
@@ -40,11 +41,12 @@ export default function SubjectList(): JSX.Element {
   };
 
   const attendLecture = async () => {
-    const init = {
-      method: "POST",
+    const init: RequestInit = {
+      credentials: "include",
       // headers: {
       //   Authorization: "Token 96558d56f429188c4ba843bec4d53f8391cacf0a",
       // },
+      method: "POST",
     };
     await fetch(
       `http://${process.env.REACT_APP_BACKEND_DOMAIN}:${process.env.REACT_APP_BACKEND_PORT}/api/lectures/${selectedLectureId}/attend/`,
