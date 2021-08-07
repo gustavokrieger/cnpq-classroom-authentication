@@ -28,6 +28,11 @@ export const registerPosition = async (
   latitude: number,
   longitude: number
 ): Promise<Response> => {
-  const data = { ip, latitude, longitude };
+  const decimalPlaces = 6;
+  const data = {
+    ip,
+    latitude: latitude.toFixed(decimalPlaces),
+    longitude: longitude.toFixed(decimalPlaces),
+  };
   return post("/positions/", data);
 };
