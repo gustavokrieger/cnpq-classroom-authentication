@@ -33,7 +33,7 @@ export default function Home(): JSX.Element {
       return;
     }
 
-    const interval = setInterval(() => getAndRegisterPosition(), 5_000);
+    const interval = setInterval(() => getAndRegisterPosition(), 60_000);
 
     const getAndRegisterPosition = async () => {
       const ip = await getIp();
