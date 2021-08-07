@@ -12,9 +12,6 @@ interface User {
 
 export default function Home(): JSX.Element {
   const [user, setUser] = useState<Readonly<User> | null>(null);
-  const [ip, setIp] = useState("");
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -32,40 +29,42 @@ export default function Home(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    (async () => {
-      const response = await fetch("https://api64.ipify.org");
-      setIp(await response.text());
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (user && ip && latitude && longitude) {
-      registerPosition(ip, latitude, longitude);
+    if (!user) {
+      return;
     }
-  }, [user, ip, latitude, longitude]);
 
-  function positionCallback(position: GeolocationPosition): void {
-    setLatitude(position.coords.latitude);
-    setLongitude(position.coords.longitude);
-  }
+    const interval = setInterval(() => getAndRegisterPosition(), 5_000);
 
-  function positionErrorCallback(
-    positionError: GeolocationPositionError
-  ): void {
-    console.warn(`ERROR(${positionError.code}): ${positionError.message}`);
-  }
+    const getAndRegisterPosition = async () => {
+      const ip = await getIp();
+      const [latitude, longitude] = await getCoordinates();
+      await registerPosition(ip, latitude, longitude);
+    };
 
-  const positionOptions = {
-    enableHighAccuracy: true,
-    timeout: 5000,
-    maximumAge: 0,
-  };
+    const getIp = async () => {
+      const response = await fetch("https://api64.ipify.org");
+      return response.text();
+    };
 
-  navigator.geolocation.getCurrentPosition(
-    positionCallback,
-    positionErrorCallback,
-    positionOptions
-  );
+    const getCoordinates = async () => {
+      const options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      };
+      const position = await getCurrentPosition(options);
+      return [position.coords.latitude, position.coords.longitude];
+    };
+
+    const getCurrentPosition = (
+      options?: PositionOptions
+    ): Promise<GeolocationPosition> =>
+      new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject, options)
+      );
+
+    return () => clearInterval(interval);
+  }, [user]);
 
   return (
     <>{user === null ? <Spinner animation="border" /> : <SubjectList />}</>
