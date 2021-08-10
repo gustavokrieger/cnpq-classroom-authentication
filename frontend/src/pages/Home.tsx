@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import SubjectList from "./SubjectList";
 import { registerPosition } from "../external/backend";
+import MainNavbar from "../components/MainNavbar";
 
 interface User {
   username: string;
@@ -67,6 +68,9 @@ export default function Home(): JSX.Element {
   }, [user]);
 
   return (
-    <>{user === null ? <Spinner animation="border" /> : <SubjectList />}</>
+    <>
+      <MainNavbar />
+      {user === null ? <Spinner animation="border" /> : <SubjectList />}
+    </>
   );
 }
