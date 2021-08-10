@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import Container from "react-bootstrap/Container";
 import ConfirmationModal from "../components/ConfirmationModal";
+import { attendLecture, loadLectures } from "../external/backend";
 
 interface Lecture {
   id: number;
@@ -17,41 +18,18 @@ export default function SubjectList(): JSX.Element {
   const [selectedLectureId, setSelectedLectureId] = useState(0);
 
   useEffect(() => {
-    loadLectures();
+    loadAndSetLectures();
   }, []);
 
-  const loadLectures = async () => {
-    const init: RequestInit = {
-      credentials: "include",
-      // headers: {
-      //   Authorization: "Token 96558d56f429188c4ba843bec4d53f8391cacf0a",
-      // },
-    };
-    const response = await fetch(
-      `http://${process.env.REACT_APP_BACKEND_DOMAIN}:${process.env.REACT_APP_BACKEND_PORT}/api/lectures/today/`,
-      init
-    );
+  const loadAndSetLectures = async () => {
+    const response = await loadLectures();
     setLectures(await response.json());
   };
 
   const handleConfirmationAccept = async () => {
     setShowConfirmation(false);
-    await attendLecture();
-    await loadLectures();
-  };
-
-  const attendLecture = async () => {
-    const init: RequestInit = {
-      credentials: "include",
-      // headers: {
-      //   Authorization: "Token 96558d56f429188c4ba843bec4d53f8391cacf0a",
-      // },
-      method: "POST",
-    };
-    await fetch(
-      `http://${process.env.REACT_APP_BACKEND_DOMAIN}:${process.env.REACT_APP_BACKEND_PORT}/api/lectures/${selectedLectureId}/attend/`,
-      init
-    );
+    await attendLecture(selectedLectureId);
+    await loadAndSetLectures();
   };
 
   const getListGroupProps = (lecture: Lecture) => {

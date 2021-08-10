@@ -1,8 +1,8 @@
 const request = async (
   urlPath: string,
-  body?: BodyInit | null,
+  method?: string,
   headers?: HeadersInit,
-  method?: string
+  body?: BodyInit | null
 ) => {
   const input = `http://${process.env.REACT_APP_BACKEND_DOMAIN}:${process.env.REACT_APP_BACKEND_PORT}/api${urlPath}`;
   const init: RequestInit = {
@@ -14,13 +14,20 @@ const request = async (
   return fetch(input, init);
 };
 
-const post = async (urlPath: string, data: unknown) => {
-  const body = JSON.stringify(data);
+const get = async (urlPath: string) => {
+  const headers = {
+    // Authorization: "Token f76b30f44ce17dec38e36f50ecadea4c4b5f5b9f",
+  };
+  return request(urlPath, "GET", headers);
+};
+
+const post = async (urlPath: string, data?: unknown) => {
   const headers = {
     // Authorization: "Token f76b30f44ce17dec38e36f50ecadea4c4b5f5b9f",
     "Content-Type": "application/json",
   };
-  return request(urlPath, body, headers, "POST");
+  const body = JSON.stringify(data);
+  return request(urlPath, "POST", headers, body);
 };
 
 export const registerPosition = async (
@@ -35,4 +42,12 @@ export const registerPosition = async (
     longitude: longitude.toFixed(decimalPlaces),
   };
   return post("/positions/", data);
+};
+
+export const loadLectures = async (): Promise<Response> => {
+  return get("/lectures/today/");
+};
+
+export const attendLecture = async (lectureId: number): Promise<Response> => {
+  return post(`/lectures/${lectureId}/attend/`);
 };
