@@ -22,7 +22,7 @@ services:
       - backend-variables.env
     ports:
       - "${BACKEND_HOST_IP}:${BACKEND_HOST_PORT}:8000"
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "wait-for db:5432 -- gunicorn sp_django.wsgi -b 127.0.0.1:8001"
     volumes:
       - ./backend:/usr/src/app
     depends_on:
