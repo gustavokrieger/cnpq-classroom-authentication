@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from base.models import TemporaryToken, Lecture, Attendance
+from base.models import TemporaryToken, Lecture, Attendance, Position
 from base.serializers import (
     TokenExchangeSerializer,
     UserSerializer,
@@ -28,6 +28,20 @@ class UserView(APIView):
         return Response(serializer.data)
 
 
+# TODO: add permission_classes.
+class UserViewSet(GenericViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = "username"
+
+    @action(detail=True)
+    def positions(self, request, username=None):
+        user = self.get_object()
+        positions = user.positions.all()
+        serializer = PositionSerializer(positions, many=True)
+        return Response(serializer.data)
+
+
 class TokenExchangeView(APIView):
     def post(self, request):
         serializer = TokenExchangeSerializer(data=request.data)
@@ -39,17 +53,14 @@ class TokenExchangeView(APIView):
 
 class PositionViewSet(
     mixins.CreateModelMixin,
-    mixins.ListModelMixin,
     GenericViewSet,
 ):
+    queryset = Position.objects.all()
     serializer_class = PositionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        return self.request.user.positions.all()
 
-
-class LectureViewSet(mixins.ListModelMixin, GenericViewSet):
+class LectureViewSet(GenericViewSet):
     serializer_class = LectureSerializer
     permission_classes = [permissions.IsAuthenticated]
 
