@@ -1,10 +1,3 @@
-.container {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-}
-
 .title-heading {
   margin: 9rem 6rem 5rem;
 }
@@ -27,4 +20,8 @@
 
 .list-group__item {
   text-transform: capitalize;
+}
+
+.list-group__text {
+  float: right;
 }

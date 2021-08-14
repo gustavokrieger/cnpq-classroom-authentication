@@ -1,13 +1,13 @@
 import "./SubjectList.css";
 import { useEffect, useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
-import Container from "react-bootstrap/Container";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { attendLecture, loadLectures } from "../external/backend";
 
 interface Lecture {
   id: number;
   course: string;
+  start: string;
   is_ongoing: boolean;
   has_attended: boolean;
 }
@@ -60,6 +60,7 @@ export default function SubjectList(): JSX.Element {
       {...getListGroupProps(v)}
     >
       {v.course}
+      <span className="list-group__text">{v.start.slice(0, -3)}</span>
     </ListGroup.Item>
   ));
 
@@ -70,21 +71,19 @@ export default function SubjectList(): JSX.Element {
         handleClose={() => setShowConfirmation(false)}
         handleAccept={handleConfirmationAccept}
       />
-      <Container className="container">
-        <h1 className="title-heading">registro de presença</h1>
-        {lectures.length === 0 ? (
+      <h1 className="title-heading">registro de presença</h1>
+      {lectures.length === 0 ? (
+        <h5 className="list-heading text-muted">
+          não há aulas para registrar presença.
+        </h5>
+      ) : (
+        <>
           <h5 className="list-heading text-muted">
-            não há aulas para registrar presença.
+            selecione aula para registrar presença.
           </h5>
-        ) : (
-          <>
-            <h5 className="list-heading text-muted">
-              selecione aula para registrar presença.
-            </h5>
-            <ListGroup className="list-group">{listGroupItems}</ListGroup>
-          </>
-        )}
-      </Container>
+          <ListGroup className="list-group">{listGroupItems}</ListGroup>
+        </>
+      )}
     </>
   );
 }

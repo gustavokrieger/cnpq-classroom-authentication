@@ -1,8 +1,10 @@
+import "./Home.css";
 import { useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import SubjectList from "./SubjectList";
 import { registerPosition } from "../external/backend";
 import MainNavbar from "../components/MainNavbar";
+import Container from "react-bootstrap/Container";
 
 interface User {
   username: string;
@@ -70,7 +72,9 @@ export default function Home(): JSX.Element {
   return (
     <>
       <MainNavbar />
-      {user === null ? <Spinner animation="border" /> : <SubjectList />}
+      <Container className="container">
+        {user === null ? <Spinner animation="border" /> : <SubjectList />}
+      </Container>
     </>
   );
 }
