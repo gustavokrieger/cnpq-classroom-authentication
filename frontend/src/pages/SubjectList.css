@@ -18,10 +18,13 @@
   width: 50%;
 }
 
-.list-group__item {
+.list-group__text {
+}
+
+.list-group__text_left {
   text-transform: capitalize;
 }
 
-.list-group__text {
+.list-group__text_right {
   float: right;
 }

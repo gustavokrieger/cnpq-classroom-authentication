@@ -8,6 +8,7 @@ interface Lecture {
   id: number;
   course: string;
   start: string;
+  end: string;
   is_ongoing: boolean;
   has_attended: boolean;
 }
@@ -53,14 +54,14 @@ export default function SubjectList(): JSX.Element {
     setSelectedLectureId(lectureId);
   };
 
+  const removeSeconds = (time: string) => time.slice(0, -3);
+
   const listGroupItems = lectures.map((v, i) => (
-    <ListGroup.Item
-      className="list-group__item"
-      key={i}
-      {...getListGroupProps(v)}
-    >
-      {v.course}
-      <span className="list-group__text">{v.start.slice(0, -3)}</span>
+    <ListGroup.Item key={i} {...getListGroupProps(v)}>
+      <span className="list-group__text list-group__text_left">{v.course}</span>
+      <span className="list-group__text list-group__text_right">
+        {`${removeSeconds(v.start)} até ${removeSeconds(v.end)}`}
+      </span>
     </ListGroup.Item>
   ));
 
