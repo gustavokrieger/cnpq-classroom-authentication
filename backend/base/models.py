@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -88,12 +88,24 @@ class Lecture(models.Model):
     def __str__(self):
         return f"{self.get_weekday_display()}, {self.start}"
 
+    @property
+    def end(self):
+        start = self._start_datetime(date.today())
+        end = self._end_datetime(start)
+        return end.time()
+
+    def _start_datetime(self, start_date):
+        return datetime.combine(start_date, self.start)
+
+    def _end_datetime(self, start_datetime):
+        return start_datetime + self.duration
+
     def is_ongoing(self):
         now = datetime.now()
         if now.weekday() != self.weekday:
             return False
-        start = datetime.combine(now.date(), self.start)
-        end = start + self.duration
+        start = self._start_datetime(now.date())
+        end = self._end_datetime(start)
         if start <= now < end:
             return True
         return False

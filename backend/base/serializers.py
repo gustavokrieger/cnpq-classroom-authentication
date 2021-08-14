@@ -39,7 +39,7 @@ class LectureAttendanceSerializer(LectureSerializer):
     has_attended = serializers.SerializerMethodField()
 
     class Meta(LectureSerializer.Meta):
-        fields = LectureSerializer.Meta.fields + ["is_ongoing", "has_attended"]
+        fields = LectureSerializer.Meta.fields + ["end", "is_ongoing", "has_attended"]
 
     def get_has_attended(self, obj):
         user = self.context["request"].user
