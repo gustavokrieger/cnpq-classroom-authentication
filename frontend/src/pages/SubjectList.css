@@ -1,5 +1,5 @@
 .title-heading {
-  margin: 9rem 6rem 5rem;
+  margin: 9rem 0 6.5rem;
 }
 
 .title-heading:first-letter {
@@ -7,7 +7,7 @@
 }
 
 .list-heading {
-  margin: 2rem;
+  margin: 0 0 2.25rem 0;
 }
 
 .list-heading:first-letter {
