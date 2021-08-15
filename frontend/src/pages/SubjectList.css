@@ -1,5 +1,5 @@
 .title-heading {
-  margin: 9rem 0 6.5rem;
+  margin: 9rem 0 6rem;
 }
 
 .title-heading:first-letter {
@@ -7,7 +7,7 @@
 }
 
 .list-heading {
-  margin: 0 0 2.25rem 0;
+  margin: 0 0 2.5rem 0;
 }
 
 .list-heading:first-letter {
@@ -27,4 +27,20 @@
 
 .list-group__text_right {
   float: right;
+}
+
+.attended-toast {
+  position: absolute;
+  top: 9rem;
+  left: 4rem;
+  background-color: rgba(33, 37, 41, 0.17);
+  font-size: medium;
+}
+
+.attended-toast__header {
+  text-transform: uppercase;
+}
+
+.attended-toast__body:first-letter {
+  text-transform: uppercase;
 }
