@@ -35,14 +35,3 @@ class AttendanceManager(models.Manager):
         if not lecture.is_ongoing():
             raise RuntimeError
         return self.create(user=user, lecture=lecture)
-
-
-class AttendanceQuerySet(models.QuerySet):
-    def for_user(self, user):
-        return self.filter(user=user)
-
-    def for_lecture(self, lecture):
-        return self.filter(lecture=lecture)
-
-    def registered_on(self, date):
-        return self.filter(registered=date)

@@ -11,7 +11,6 @@ from base.managers import (
     TemporaryTokenManager,
     LectureQuerySet,
     AttendanceManager,
-    AttendanceQuerySet,
 )
 
 
@@ -114,17 +113,9 @@ class Lecture(models.Model):
 class Attendance(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, models.PROTECT)
     lecture = models.ForeignKey(Lecture, models.PROTECT)
-    registered = models.DateField(auto_now_add=True)
+    registered = models.DateTimeField(auto_now_add=True)
 
-    objects = AttendanceManager.from_queryset(AttendanceQuerySet)()
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["user", "lecture", "registered"],
-                name="unique_attendance_per_day",
-            ),
-        ]
+    objects = AttendanceManager()
 
     def __str__(self):
         return str(self.registered)

@@ -1,9 +1,7 @@
-from datetime import date
-
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from base.models import Lecture, Attendance, Position
+from base.models import Lecture, Position
 
 User = get_user_model()
 
@@ -36,15 +34,5 @@ class LectureSerializer(serializers.ModelSerializer):
 
 
 class LectureAttendanceSerializer(LectureSerializer):
-    has_attended = serializers.SerializerMethodField()
-
     class Meta(LectureSerializer.Meta):
-        fields = LectureSerializer.Meta.fields + ["end", "is_ongoing", "has_attended"]
-
-    def get_has_attended(self, obj):
-        user = self.context["request"].user
-        today = date.today()
-        queryset = (
-            Attendance.objects.for_user(user).for_lecture(obj).registered_on(today)
-        )
-        return queryset.exists()
+        fields = LectureSerializer.Meta.fields + ["end", "is_ongoing"]

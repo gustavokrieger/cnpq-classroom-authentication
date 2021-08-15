@@ -72,8 +72,7 @@ class LectureViewSet(GenericViewSet):
     def today(self, request):
         weekday = date.today().weekday()
         queryset = self.get_queryset().on_weekday(weekday).by_start()
-        context = {"request": request}
-        serializer = LectureAttendanceSerializer(queryset, many=True, context=context)
+        serializer = LectureAttendanceSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(methods=["post"], detail=True)
