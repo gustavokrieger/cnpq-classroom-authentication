@@ -95,6 +95,8 @@ export default function SubjectList(): JSX.Element {
         </>
       )}
       <ConfirmationModal
+        title="confirmação"
+        body="esta ação irá começar a registar sua presença."
         show={showConfirmation}
         handleClose={() => setShowConfirmation(false)}
         handleAccept={handleConfirmationAccept}
