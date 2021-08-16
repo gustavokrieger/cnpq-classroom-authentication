@@ -1,4 +1,4 @@
-const request = async (
+const request = (
   urlPath: string,
   method?: string,
   headers?: HeadersInit,
@@ -14,23 +14,25 @@ const request = async (
   return fetch(input, init);
 };
 
-const get = async (urlPath: string) => {
+const get = (urlPath: string) => {
   const headers = {
-    // Authorization: "Token f76b30f44ce17dec38e36f50ecadea4c4b5f5b9f",
+    // TODO: remove.
+    // Authorization: "Token 391c9d7e93915bd170ba3c0e266e2f4274467dac",
   };
   return request(urlPath, "GET", headers);
 };
 
-const post = async (urlPath: string, data?: unknown) => {
+const post = (urlPath: string, data?: unknown) => {
   const headers = {
-    // Authorization: "Token f76b30f44ce17dec38e36f50ecadea4c4b5f5b9f",
+    // TODO: remove.
+    // Authorization: "Token 391c9d7e93915bd170ba3c0e266e2f4274467dac",
     "Content-Type": "application/json",
   };
   const body = JSON.stringify(data);
   return request(urlPath, "POST", headers, body);
 };
 
-export const registerPosition = async (
+export const registerPosition = (
   ip: string,
   latitude: number,
   longitude: number
@@ -44,10 +46,9 @@ export const registerPosition = async (
   return post("/positions/", data);
 };
 
-export const loadLectures = async (): Promise<Response> => {
-  return get("/lectures/today/");
-};
+export const getUserData = (): Promise<Response> => get("/user/");
 
-export const attendLecture = async (lectureId: number): Promise<Response> => {
-  return post(`/lectures/${lectureId}/attend/`);
-};
+export const loadLectures = (): Promise<Response> => get("/lectures/today/");
+
+export const attendLecture = (lectureId: number): Promise<Response> =>
+  post(`/lectures/${lectureId}/attend/`);

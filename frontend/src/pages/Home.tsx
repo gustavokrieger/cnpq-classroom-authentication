@@ -1,10 +1,10 @@
 import "./Home.css";
 import { useEffect, useState } from "react";
-import Spinner from "react-bootstrap/Spinner";
-import SubjectList from "./SubjectList";
-import { registerPosition } from "../external/backend";
+import Courses from "./Courses";
+import { getUserData, registerPosition } from "../external/backend";
 import MainNavbar from "../components/MainNavbar";
 import Container from "react-bootstrap/Container";
+import Login from "./Login";
 
 interface User {
   username: string;
@@ -18,16 +18,10 @@ export default function Home(): JSX.Element {
 
   useEffect(() => {
     (async () => {
-      const response = await fetch(
-        `http://${process.env.REACT_APP_BACKEND_DOMAIN}:${process.env.REACT_APP_BACKEND_PORT}/api/lectures/today/`,
-        { credentials: "include" }
-      );
-      if (response.status === 403) {
-        window.location.replace(
-          `http://${process.env.REACT_APP_BACKEND_DOMAIN}:${process.env.REACT_APP_BACKEND_PORT}/saml2/login/`
-        );
+      const response = await getUserData();
+      if (response.ok) {
+        setUser(await response.json());
       }
-      setUser(await response.json());
     })();
   }, []);
 
@@ -73,7 +67,7 @@ export default function Home(): JSX.Element {
     <>
       <MainNavbar />
       <Container className="container">
-        {user === null ? <Spinner animation="border" /> : <SubjectList />}
+        {user ? <Courses /> : <Login />}
       </Container>
     </>
   );

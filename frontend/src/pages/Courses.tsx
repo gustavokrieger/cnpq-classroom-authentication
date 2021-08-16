@@ -1,4 +1,4 @@
-import "./SubjectList.css";
+import "./Courses.css";
 import { useEffect, useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import ConfirmationModal from "../components/ConfirmationModal";
@@ -13,7 +13,7 @@ interface Lecture {
   is_ongoing: boolean;
 }
 
-export default function SubjectList(): JSX.Element {
+export default function Courses(): JSX.Element {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [lectures, setLectures] = useState<readonly Lecture[]>([]);
