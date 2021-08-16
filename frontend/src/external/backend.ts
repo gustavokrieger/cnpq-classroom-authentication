@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 const request = (
   urlPath: string,
   method?: string,
@@ -27,6 +29,7 @@ const post = (urlPath: string, data?: unknown) => {
     // TODO: remove.
     // Authorization: "Token 391c9d7e93915bd170ba3c0e266e2f4274467dac",
     "Content-Type": "application/json",
+    "X-CSRFToken": Cookies.get("csrftoken") || "",
   };
   const body = JSON.stringify(data);
   return request(urlPath, "POST", headers, body);
