@@ -1,4 +1,19 @@
-import Cookies from "js-cookie";
+// Copied from: https://docs.djangoproject.com/en/3.0/ref/csrf/#ajax
+const getCookie = (name: string) => {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+};
 
 const request = (
   urlPath: string,
@@ -29,7 +44,7 @@ const post = (urlPath: string, data?: unknown) => {
     // TODO: remove.
     // Authorization: "Token 391c9d7e93915bd170ba3c0e266e2f4274467dac",
     "Content-Type": "application/json",
-    "X-CSRFToken": Cookies.get("csrftoken") || "",
+    "X-CSRFToken": getCookie("csrftoken") || "",
   };
   const body = JSON.stringify(data);
   return request(urlPath, "POST", headers, body);
