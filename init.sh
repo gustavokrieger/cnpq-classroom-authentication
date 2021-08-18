@@ -12,11 +12,3 @@ echo Starting migrate...
 $manage migrate
 echo Collecting static files...
 $manage collectstatic --no-input
-
-# Nginx
-output=$($exec /etc/init.d/nginx status)
-if [ "$output" = "nginx is not running ... failed!" ]
-then
-    echo Starting nginx...
-    $exec /usr/sbin/nginx
-fi

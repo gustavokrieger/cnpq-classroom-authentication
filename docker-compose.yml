@@ -22,9 +22,10 @@ services:
       - backend-variables.env
     ports:
       - "${BACKEND_HOST_IP}:${BACKEND_HOST_PORT}:8000"
-    command: sh -c "wait-for db:5432 -- gunicorn sp_django.wsgi -b 127.0.0.1:8001"
+    command: sh -c "wait-for db:5432 -- gunicorn sp_django.wsgi -b 0.0.0.0"
     volumes:
       - ./backend:/usr/src/app
+      - /var/www/static:/var/www/static
     depends_on:
       - db
 
