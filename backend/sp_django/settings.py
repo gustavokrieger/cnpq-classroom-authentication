@@ -21,7 +21,7 @@ PORT = os.getenv("BACKEND_HOST_PORT", "8000")
 FQDN = "http://" + DOMAIN + ":" + PORT
 CERT_DIR = "certificates"
 
-FRONTEND_URL = "http://" + DOMAIN + ":5000"
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://127.0.0.1:3000")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
