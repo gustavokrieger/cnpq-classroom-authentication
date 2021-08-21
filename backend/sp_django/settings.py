@@ -16,9 +16,7 @@ import saml2
 import saml2.saml
 
 # configurações de ambiente
-DOMAIN = os.getenv("DOMAIN", "localhost")
-PORT = os.getenv("BACKEND_HOST_PORT", "8000")
-FQDN = "http://" + DOMAIN + ":" + PORT
+BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
 CERT_DIR = "certificates"
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://127.0.0.1:3000")
@@ -46,10 +44,7 @@ ALLOWED_HOSTS = (
 # Configuração do CORS
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = [
-    FRONTEND_URL,
-]
+CORS_ALLOWED_ORIGINS = [FRONTEND_URL]
 
 
 # Application definition
@@ -201,7 +196,7 @@ SAML_ATTRIBUTE_MAPPING = {
 SAML_CONFIG = {
     # Biblioteca usada para assinatura e criptografia
     "xmlsec_binary": "/usr/bin/xmlsec1",
-    "entityid": FQDN + "/saml2/metadata/",
+    "entityid": BACKEND_URL + "/saml2/metadata/",
     # Diretório contendo os esquemas de mapeamento de atributo
     "attribute_map_dir": os.path.join(BASE_DIR, "attribute-maps"),
     "description": "SP Implicit",
@@ -228,11 +223,11 @@ SAML_CONFIG = {
             # Indica os endpoints dos serviços fornecidos
             "endpoints": {
                 "assertion_consumer_service": [
-                    (FQDN + "/saml2/acs/", saml2.BINDING_HTTP_POST),
+                    (BACKEND_URL + "/saml2/acs/", saml2.BINDING_HTTP_POST),
                 ],
                 "single_logout_service": [
-                    (FQDN + "/saml2/ls/", saml2.BINDING_HTTP_REDIRECT),
-                    (FQDN + "/saml2/ls/post", saml2.BINDING_HTTP_POST),
+                    (BACKEND_URL + "/saml2/ls/", saml2.BINDING_HTTP_REDIRECT),
+                    (BACKEND_URL + "/saml2/ls/post", saml2.BINDING_HTTP_POST),
                 ],
             },
             # Algoritmos utilizados

@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 export default function Login(): JSX.Element {
   const handleClick = () =>
     window.location.replace(
-      `http://${process.env.REACT_APP_BACKEND_DOMAIN}:${process.env.REACT_APP_BACKEND_PORT}/saml2/login/`
+      `${process.env.REACT_APP_BACKEND_URL}/saml2/login/`
     );
 
   return (

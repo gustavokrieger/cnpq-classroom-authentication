@@ -21,7 +21,7 @@ const request = (
   headers?: HeadersInit,
   body?: BodyInit | null
 ) => {
-  const input = `http://${process.env.REACT_APP_BACKEND_DOMAIN}:${process.env.REACT_APP_BACKEND_PORT}/api${urlPath}`;
+  const input = `${process.env.REACT_APP_BACKEND_URL}/api${urlPath}`;
   const init: RequestInit = {
     body: body,
     credentials: "include",
