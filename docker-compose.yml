@@ -13,7 +13,7 @@ services:
   backend:
     build: ./backend
     environment:
-      - BACKEND_URL
+      - LOGIN_BASE_URL
       - POSTGRES_DB
       - POSTGRES_USER
       - POSTGRES_PASSWORD
@@ -31,7 +31,9 @@ services:
   frontend:
     build: ./frontend
     environment:
-      - REACT_APP_BACKEND_URL=${BACKEND_URL}
+      - REACT_APP_LOGIN_BASE_URL=${LOGIN_BASE_URL}
+    env_file:
+      - frontend-variables.env
     ports:
       - "${FRONTEND_HOST_IP}:${FRONTEND_HOST_PORT}:5000"
     command: sh -c "yarn build && yarn serve -s -n build"

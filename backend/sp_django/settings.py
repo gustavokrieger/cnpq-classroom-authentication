@@ -16,7 +16,7 @@ import saml2
 import saml2.saml
 
 # configurações de ambiente
-BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
+LOGIN_BASE_URL = os.getenv("LOGIN_BASE_URL", "http://127.0.0.1:8000")
 CERT_DIR = "certificates"
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://127.0.0.1:3000")
@@ -196,7 +196,7 @@ SAML_ATTRIBUTE_MAPPING = {
 SAML_CONFIG = {
     # Biblioteca usada para assinatura e criptografia
     "xmlsec_binary": "/usr/bin/xmlsec1",
-    "entityid": BACKEND_URL + "/saml2/metadata/",
+    "entityid": LOGIN_BASE_URL + "/saml2/metadata/",
     # Diretório contendo os esquemas de mapeamento de atributo
     "attribute_map_dir": os.path.join(BASE_DIR, "attribute-maps"),
     "description": "SP Implicit",
@@ -223,11 +223,11 @@ SAML_CONFIG = {
             # Indica os endpoints dos serviços fornecidos
             "endpoints": {
                 "assertion_consumer_service": [
-                    (BACKEND_URL + "/saml2/acs/", saml2.BINDING_HTTP_POST),
+                    (LOGIN_BASE_URL + "/saml2/acs/", saml2.BINDING_HTTP_POST),
                 ],
                 "single_logout_service": [
-                    (BACKEND_URL + "/saml2/ls/", saml2.BINDING_HTTP_REDIRECT),
-                    (BACKEND_URL + "/saml2/ls/post", saml2.BINDING_HTTP_POST),
+                    (LOGIN_BASE_URL + "/saml2/ls/", saml2.BINDING_HTTP_REDIRECT),
+                    (LOGIN_BASE_URL + "/saml2/ls/post", saml2.BINDING_HTTP_POST),
                 ],
             },
             # Algoritmos utilizados
