@@ -4,3 +4,9 @@
   flex-direction: column;
   height: 100vh;
 }
+
+.loading-spinner {
+  margin: 18rem 0 0;
+  width: 4rem;
+  height: 4rem;
+}

@@ -5,6 +5,7 @@ import { getUserData, registerPosition } from "../external/backend";
 import MainNavbar from "../components/MainNavbar";
 import Container from "react-bootstrap/Container";
 import Login from "./Login";
+import Spinner from "react-bootstrap/Spinner";
 
 interface User {
   username: string;
@@ -14,11 +15,14 @@ interface User {
 }
 
 export default function Home(): JSX.Element {
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<Readonly<User> | null>(null);
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
       const response = await getUserData();
+      setLoading(false);
       if (response.ok) {
         setUser(await response.json());
       }
@@ -63,12 +67,19 @@ export default function Home(): JSX.Element {
     return () => clearInterval(interval);
   }, [user]);
 
+  let component;
+  if (loading) {
+    component = <Spinner className="loading-spinner" animation="border" />;
+  } else if (user) {
+    component = <Courses />;
+  } else {
+    component = <Login />;
+  }
+
   return (
     <>
       <MainNavbar />
-      <Container className="container">
-        {user ? <Courses /> : <Login />}
-      </Container>
+      <Container className="container">{component}</Container>
     </>
   );
 }
