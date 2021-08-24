@@ -33,6 +33,7 @@ class UserViewSet(GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = "username"
+    lookup_value_regex = "[^/]+"
 
     @action(detail=True)
     def positions(self, request, username=None):
