@@ -35,11 +35,11 @@ class UserViewSet(GenericViewSet):
     lookup_field = "username"
     lookup_value_regex = "[^/]+"
 
-    @action(detail=True)
-    def positions(self, request, username=None):
+    @action(detail=True, url_path="last-position", serializer_class=PositionSerializer)
+    def last_position(self, request, username=None):
         user = self.get_object()
-        positions = user.positions.all()
-        serializer = PositionSerializer(positions, many=True)
+        position = user.positions.latest()
+        serializer = self.get_serializer(position)
         return Response(serializer.data)
 
 

@@ -42,6 +42,7 @@ class Position(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        get_latest_by = "created"
         ordering = ["-created"]
 
     def __str__(self):
