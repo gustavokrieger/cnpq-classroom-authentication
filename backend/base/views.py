@@ -2,6 +2,7 @@ from datetime import date
 
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
+from django.http import Http404
 from rest_framework import permissions, mixins, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -38,7 +39,10 @@ class UserViewSet(GenericViewSet):
     @action(detail=True, url_path="last-position", serializer_class=PositionSerializer)
     def last_position(self, request, username=None):
         user = self.get_object()
-        position = user.positions.latest()
+        try:
+            position = user.positions.latest()
+        except Position.DoesNotExist:
+            raise Http404
         serializer = self.get_serializer(position)
         return Response(serializer.data)
 
