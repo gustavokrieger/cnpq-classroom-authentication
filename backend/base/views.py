@@ -46,6 +46,13 @@ class UserViewSet(GenericViewSet):
         serializer = self.get_serializer(position)
         return Response(serializer.data)
 
+    @action(methods=["post"], detail=True, url_path="log-out")
+    def log_out(self):
+        user = self.get_object()
+        user.log_out()
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
+
 
 class TokenExchangeView(APIView):
     def post(self, request):
