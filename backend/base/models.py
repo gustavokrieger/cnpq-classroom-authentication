@@ -21,6 +21,7 @@ class User(AbstractUser):
             raise ValueError("can only log out if password is unusable")
         # Changing a user’s password will log out all their sessions.
         self.set_unusable_password()
+        self.save(update_fields=["password"])
 
 
 class TemporaryToken(Token):
