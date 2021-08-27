@@ -17,7 +17,7 @@ from base.managers import (
 # https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#using-a-custom-user-model-when-starting-a-project
 class User(AbstractUser):
     def log_out(self):
-        if self.has_usable_password():
+        if self.password and self.has_usable_password():
             raise ValueError("can only log out when password is unusable")
         # Changing a user’s password will log out all their sessions.
         self.set_unusable_password()

@@ -47,7 +47,7 @@ class UserViewSet(GenericViewSet):
         return Response(serializer.data)
 
     @action(methods=["post"], detail=True, url_path="log-out")
-    def log_out(self):
+    def log_out(self, request, username=None):
         user = self.get_object()
         user.log_out()
         serializer = self.get_serializer(user)
