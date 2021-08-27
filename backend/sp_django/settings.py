@@ -235,7 +235,8 @@ SAML_CONFIG = {
             # Algoritmos utilizados
             "signing_algorithm": saml2.xmldsig.SIG_RSA_SHA256,
             "digest_algorithm": saml2.xmldsig.DIGEST_SHA256,
-            "force_authn": False,
+            # TODO: talvez deva ser false.
+            "force_authn": True,
             "name_id_format_allow_create": False,
             # Indica que as respostas de autenticação para este SP devem ser assinadas
             "want_response_signed": True,
