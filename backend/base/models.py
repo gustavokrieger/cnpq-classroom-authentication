@@ -18,7 +18,7 @@ from base.managers import (
 class User(AbstractUser):
     def log_out(self):
         if self.password and self.has_usable_password():
-            raise ValueError("can only log out when password is unusable")
+            raise ValueError("cannot log out with usable password")
         # Changing a user’s password will log out all their sessions.
         self.set_unusable_password()
         self.save(update_fields=["password"])
