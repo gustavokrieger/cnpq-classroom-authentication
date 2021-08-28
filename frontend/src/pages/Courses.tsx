@@ -21,6 +21,13 @@ export default function Courses(): JSX.Element {
   const [attendingLectureId, setAttendingLectureId] = useState(0);
 
   useEffect(() => {
+    window.addEventListener("beforeunload", (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    });
+  }, []);
+
+  useEffect(() => {
     loadAndSetLectures();
   }, []);
 
@@ -32,7 +39,7 @@ export default function Courses(): JSX.Element {
     const interval = setInterval(() => {
       attendLecture(attendingLectureId);
       setShowToast(true);
-    }, 5_000);
+    }, 6_000);
 
     return () => clearInterval(interval);
   }, [attendingLectureId]);
@@ -105,7 +112,7 @@ export default function Courses(): JSX.Element {
         className="attended-toast"
         onClose={() => setShowToast(false)}
         show={showToast}
-        delay={3_000}
+        delay={4_000}
         autohide
       >
         <Toast.Header className="attended-toast__header" closeButton={false}>
