@@ -30,12 +30,6 @@ export default function Home(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (!user) {
-      return;
-    }
-
-    const interval = setInterval(() => getAndRegisterPosition(), 60_000);
-
     const getAndRegisterPosition = async () => {
       const ip = await getIp();
       const [latitude, longitude] = await getCoordinates();
@@ -64,6 +58,11 @@ export default function Home(): JSX.Element {
         navigator.geolocation.getCurrentPosition(resolve, reject, options)
       );
 
+    if (!user) {
+      return;
+    }
+    getAndRegisterPosition();
+    const interval = setInterval(getAndRegisterPosition, 60 * 1_000);
     return () => clearInterval(interval);
   }, [user]);
 
