@@ -2,7 +2,11 @@ import "./Courses.css";
 import { useEffect, useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import ConfirmationModal from "../components/ConfirmationModal";
-import { attendLecture, loadLectures } from "../external/backend";
+import {
+  attendLecture,
+  loadLectures,
+  registerPosition,
+} from "../external/backend";
 import Toast from "react-bootstrap/Toast";
 
 interface Lecture {
@@ -25,6 +29,40 @@ export default function Courses(): JSX.Element {
       e.preventDefault();
       e.returnValue = "";
     });
+  }, []);
+
+  useEffect(() => {
+    const getAndRegisterPosition = async () => {
+      const ip = await getIp();
+      const [latitude, longitude] = await getCoordinates();
+      await registerPosition(ip, latitude, longitude);
+    };
+
+    const getIp = async () => {
+      const response = await fetch("https://api64.ipify.org");
+      return response.text();
+    };
+
+    const getCoordinates = async () => {
+      const options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      };
+      const position = await getCurrentPosition(options);
+      return [position.coords.latitude, position.coords.longitude];
+    };
+
+    const getCurrentPosition = (
+      options?: PositionOptions
+    ): Promise<GeolocationPosition> =>
+      new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject, options)
+      );
+
+    getAndRegisterPosition();
+    const interval = setInterval(getAndRegisterPosition, 60 * 1_000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
