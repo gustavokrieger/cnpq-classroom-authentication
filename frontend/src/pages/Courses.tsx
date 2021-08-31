@@ -36,7 +36,7 @@ export default function Courses(): JSX.Element {
 
   const unauthorizedRedirect = useCallback(
     (response: Response) => {
-      if (response.status === 401) {
+      if (response.status === 403) {
         history.push("/desautorizado");
       }
     },
