@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Coordinates from "./pages/Coordinates";
+import Unauthorized from "./pages/Unauthorized";
 import Home from "./pages/Home";
 
 export default function App(): JSX.Element {
@@ -8,6 +9,9 @@ export default function App(): JSX.Element {
       <Switch>
         <Route path="/coordinates">
           <Coordinates />
+        </Route>
+        <Route path="/desautorizado">
+          <Unauthorized />
         </Route>
         <Route path="/">
           <Home />

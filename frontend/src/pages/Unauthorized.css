@@ -1,0 +1,26 @@
+.unauthorized-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.unauthorized-header {
+  margin: 11rem 0 1.5rem 0;
+}
+
+.unauthorized-header:first-letter {
+  text-transform: uppercase;
+}
+
+.unauthorized-sub-heading {
+  margin: 0 0 5.5rem 0;
+}
+
+.unauthorized-sub-heading:first-letter {
+  text-transform: uppercase;
+}
+
+.unauthorized-button:first-letter {
+  text-transform: uppercase;
+}

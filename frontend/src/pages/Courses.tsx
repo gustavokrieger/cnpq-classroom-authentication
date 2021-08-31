@@ -1,5 +1,6 @@
 import "./Courses.css";
-import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import ConfirmationModal from "../components/ConfirmationModal";
 import {
@@ -18,6 +19,8 @@ interface Lecture {
 }
 
 export default function Courses(): JSX.Element {
+  const history = useHistory();
+
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [lectures, setLectures] = useState<readonly Lecture[]>([]);
@@ -31,11 +34,21 @@ export default function Courses(): JSX.Element {
     });
   }, []);
 
+  const unauthorizedRedirect = useCallback(
+    (response: Response) => {
+      if (response.status === 401) {
+        history.push("/desautorizado");
+      }
+    },
+    [history]
+  );
+
   useEffect(() => {
     const getAndRegisterPosition = async () => {
       const ip = await getIp();
       const [latitude, longitude] = await getCoordinates();
-      await registerPosition(ip, latitude, longitude);
+      const response = await registerPosition(ip, latitude, longitude);
+      unauthorizedRedirect(response);
     };
 
     const getIp = async () => {
@@ -63,29 +76,29 @@ export default function Courses(): JSX.Element {
     getAndRegisterPosition();
     const interval = setInterval(getAndRegisterPosition, 60 * 1_000);
     return () => clearInterval(interval);
-  }, []);
+  }, [unauthorizedRedirect]);
 
   useEffect(() => {
-    loadAndSetLectures();
-  }, []);
+    (async () => {
+      const response = await loadLectures();
+      unauthorizedRedirect(response);
+      setLectures(await response.json());
+    })();
+  }, [unauthorizedRedirect]);
 
   useEffect(() => {
     if (!attendingLectureId) {
       return;
     }
 
-    const interval = setInterval(() => {
-      attendLecture(attendingLectureId);
+    const interval = setInterval(async () => {
+      const response = await attendLecture(attendingLectureId);
+      unauthorizedRedirect(response);
       setShowToast(true);
     }, 6_000);
 
     return () => clearInterval(interval);
-  }, [attendingLectureId]);
-
-  const loadAndSetLectures = async () => {
-    const response = await loadLectures();
-    setLectures(await response.json());
-  };
+  }, [attendingLectureId, unauthorizedRedirect]);
 
   const handleConfirmationAccept = async () => {
     setShowConfirmation(false);

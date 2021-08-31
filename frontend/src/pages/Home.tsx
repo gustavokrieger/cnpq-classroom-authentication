@@ -41,7 +41,7 @@ export default function Home(): JSX.Element {
   return (
     <>
       <MainNavbar />
-      <Container className="container">{component}</Container>
+      <Container className="home-container">{component}</Container>
     </>
   );
 }
