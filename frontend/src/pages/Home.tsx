@@ -34,7 +34,9 @@ export default function Home(): JSX.Element {
 
       await getAndRegisterPosition(DEFAULT_OPTIONS);
       window.location.replace(
-        `${process.env.REACT_APP_LOGIN_BASE_URL}/saml2/login/?idp=${process.env.REACT_APP_LOGIN_BASE_URL}/idp/shibboleth`
+        "https://sp-implicit.cafeexpresso.rnp.br/saml2/login" +
+          "/?next=https://sp-implicit.cafeexpresso.rnp.br" +
+          "&idp=https://idp-implicit.cafeexpresso.rnp.br/idp/shibboleth"
       );
     };
 
