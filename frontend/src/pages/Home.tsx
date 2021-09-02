@@ -39,6 +39,7 @@ export default function Home(): JSX.Element {
       setLoading(true);
       const response = await getUserData();
       if (response.status === 403) {
+        setLoading(false);
         return;
       }
 
