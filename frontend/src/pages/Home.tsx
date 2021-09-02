@@ -21,11 +21,6 @@ export default function Home(): JSX.Element {
   const [user, setUser] = useState<Readonly<User> | null>(null);
 
   useEffect(() => {
-    const getUserDataJson = async () => {
-      const response = await getUserData();
-      return response.json();
-    };
-
     const checkForPosition = async (username: string) => {
       const response = await getLastPosition(username);
       if (response.status !== 404) {
@@ -42,7 +37,12 @@ export default function Home(): JSX.Element {
 
     (async () => {
       setLoading(true);
-      const userData = await getUserDataJson();
+      const response = await getUserData();
+      if (response.status === 403) {
+        return;
+      }
+
+      const userData = await response.json();
       await checkForPosition(userData.username);
       setUser(userData);
       setLoading(false);
