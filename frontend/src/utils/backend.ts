@@ -63,6 +63,9 @@ export const registerPosition = (
   return post("/positions/", data);
 };
 
+export const getLastPosition = (username: string): Promise<Response> =>
+  get(`/users/${username}/last-position/`);
+
 export const getUserData = (): Promise<Response> => get("/user/");
 
 export const loadLectures = (): Promise<Response> => get("/lectures/today/");

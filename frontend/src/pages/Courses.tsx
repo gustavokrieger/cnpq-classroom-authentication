@@ -3,12 +3,10 @@ import { useHistory } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import ConfirmationModal from "../components/ConfirmationModal";
-import {
-  attendLecture,
-  loadLectures,
-  registerPosition,
-} from "../external/backend";
+import { attendLecture, loadLectures } from "../utils/backend";
 import Toast from "react-bootstrap/Toast";
+import { DEFAULT_OPTIONS } from "../utils/geolocation";
+import { getAndRegisterPosition } from "../utils/general";
 
 interface Lecture {
   id: number;
@@ -44,37 +42,13 @@ export default function Courses(): JSX.Element {
   );
 
   useEffect(() => {
-    const getAndRegisterPosition = async () => {
-      const ip = await getIp();
-      const [latitude, longitude] = await getCoordinates();
-      const response = await registerPosition(ip, latitude, longitude);
+    const getAndRegisterPositionDefault = async () => {
+      const response = await getAndRegisterPosition(DEFAULT_OPTIONS);
       unauthorizedRedirect(response);
     };
 
-    const getIp = async () => {
-      const response = await fetch("https://api64.ipify.org");
-      return response.text();
-    };
-
-    const getCoordinates = async () => {
-      const options = {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0,
-      };
-      const position = await getCurrentPosition(options);
-      return [position.coords.latitude, position.coords.longitude];
-    };
-
-    const getCurrentPosition = (
-      options?: PositionOptions
-    ): Promise<GeolocationPosition> =>
-      new Promise((resolve, reject) =>
-        navigator.geolocation.getCurrentPosition(resolve, reject, options)
-      );
-
-    getAndRegisterPosition();
-    const interval = setInterval(getAndRegisterPosition, 60 * 1_000);
+    getAndRegisterPositionDefault();
+    const interval = setInterval(getAndRegisterPositionDefault, 60 * 1_000);
     return () => clearInterval(interval);
   }, [unauthorizedRedirect]);
 
