@@ -16,6 +16,7 @@
 
 .list-group {
   width: 50%;
+  margin: 0 0 2rem 0;
 }
 
 .list-group__text {

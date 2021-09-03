@@ -7,6 +7,7 @@ import { attendLecture, loadLectures } from "../utils/backend";
 import Toast from "react-bootstrap/Toast";
 import { DEFAULT_OPTIONS } from "../utils/geolocation";
 import { getAndRegisterPosition } from "../utils/general";
+import Button from "react-bootstrap/Button";
 
 interface Lecture {
   id: number;
@@ -25,12 +26,13 @@ export default function Courses(): JSX.Element {
   const [selectedLectureId, setSelectedLectureId] = useState(0);
   const [attendingLectureId, setAttendingLectureId] = useState(0);
 
-  useEffect(() => {
-    window.addEventListener("beforeunload", (e) => {
-      e.preventDefault();
-      e.returnValue = "";
-    });
-  }, []);
+  // TODO: maybe add back later.
+  // useEffect(() => {
+  //   window.addEventListener("beforeunload", (e) => {
+  //     e.preventDefault();
+  //     e.returnValue = "";
+  //   });
+  // }, []);
 
   const unauthorizedRedirect = useCallback(
     (response: Response) => {
@@ -126,6 +128,18 @@ export default function Courses(): JSX.Element {
           <ListGroup className="list-group">{listGroupItems}</ListGroup>
         </>
       )}
+      {/*TODO: remove button.*/}
+      <Button
+        onClick={() =>
+          window.location.replace(
+            "https://sp-implicit.cafeexpresso.rnp.br/saml2/login" +
+              "/?next=https://sp-implicit.cafeexpresso.rnp.br" +
+              "&idp=https://idp-implicit.cafeexpresso.rnp.br/idp/shibboleth"
+          )
+        }
+      >
+        redirect
+      </Button>
       <ConfirmationModal
         title="confirmação"
         body="esta ação irá começar a registar sua presença."
