@@ -161,7 +161,7 @@ export default function Courses(): JSX.Element {
           <strong>aviso</strong>
         </Toast.Header>
         <Toast.Body className="attended-toast__body">
-          sua presença na aula foi registrada.
+          {`presença em ${attendingLecture?.course} registrada.`}
         </Toast.Body>
       </Toast>
     </>
