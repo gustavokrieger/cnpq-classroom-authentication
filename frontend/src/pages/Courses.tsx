@@ -142,7 +142,8 @@ export default function Courses(): JSX.Element {
       </Button>
       <ConfirmationModal
         title="confirmação"
-        body="esta ação irá começar a registar sua presença."
+        body="sua presença começará a ser registrada.
+        Depois de confirmar, mantenha esta aba do browser aberta."
         show={showConfirmation}
         handleClose={() => setShowConfirmation(false)}
         handleAccept={handleConfirmationAccept}
