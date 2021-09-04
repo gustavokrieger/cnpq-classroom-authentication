@@ -23,8 +23,10 @@ export default function Courses(): JSX.Element {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [lectures, setLectures] = useState<readonly Lecture[]>([]);
-  const [selectedLectureId, setSelectedLectureId] = useState(0);
-  const [attendingLectureId, setAttendingLectureId] = useState(0);
+  const [selectedLecture, setSelectedLecture] =
+    useState<Readonly<Lecture> | null>(null);
+  const [attendingLecture, setAttendingLecture] =
+    useState<Readonly<Lecture> | null>(null);
 
   // TODO: maybe add back later.
   // useEffect(() => {
@@ -63,26 +65,26 @@ export default function Courses(): JSX.Element {
   }, [unauthorizedRedirect]);
 
   useEffect(() => {
-    if (!attendingLectureId) {
+    if (!attendingLecture) {
       return;
     }
 
     const interval = setInterval(async () => {
-      const response = await attendLecture(attendingLectureId);
+      const response = await attendLecture(attendingLecture.id);
       unauthorizedRedirect(response);
       setShowToast(true);
     }, 6_000);
 
     return () => clearInterval(interval);
-  }, [attendingLectureId, unauthorizedRedirect]);
+  }, [attendingLecture, unauthorizedRedirect]);
 
   const handleConfirmationAccept = async () => {
     setShowConfirmation(false);
-    setAttendingLectureId(selectedLectureId);
+    setAttendingLecture(selectedLecture);
   };
 
   const getListGroupProps = (lecture: Lecture) => {
-    if (lecture.id === attendingLectureId) {
+    if (lecture.id === attendingLecture?.id) {
       return {
         variant: "success",
       };
@@ -90,16 +92,16 @@ export default function Courses(): JSX.Element {
     if (lecture.is_ongoing) {
       return {
         action: true,
-        onClick: () => handleListGroupItemClick(lecture.id),
+        onClick: () => handleListGroupItemClick(lecture),
         active: true,
       };
     }
     return {};
   };
 
-  const handleListGroupItemClick = (lectureId: number) => {
+  const handleListGroupItemClick = (lecture: Lecture) => {
     setShowConfirmation(true);
-    setSelectedLectureId(lectureId);
+    setSelectedLecture(lecture);
   };
 
   const removeSeconds = (time: string) => time.slice(0, -3);
