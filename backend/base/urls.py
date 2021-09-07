@@ -12,5 +12,4 @@ router.register(r"lectures", views.LectureViewSet, basename="lecture")
 
 urlpatterns = [
     path("token-exchange/", views.TokenExchangeView.as_view(), name="token-exchange"),
-    path("user/", views.UserView.as_view(), name="user"),
 ] + router.urls

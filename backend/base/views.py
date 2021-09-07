@@ -3,8 +3,9 @@ from datetime import date
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from django.http import Http404
-from rest_framework import permissions, mixins, status
+from rest_framework import mixins, status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
@@ -21,20 +22,17 @@ from base.serializers import (
 User = get_user_model()
 
 
-class UserView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-        serializer = UserSerializer(request.user)
-        return Response(serializer.data)
-
-
 # TODO: add permission_classes.
 class UserViewSet(GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = "username"
     lookup_value_regex = "[^/]+"
+
+    @action(detail=False, permission_classes=[IsAuthenticated])
+    def self(self, request):
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)
 
     @action(detail=True, url_path="last-position", serializer_class=PositionSerializer)
     def last_position(self, request, username=None):
@@ -69,12 +67,12 @@ class PositionViewSet(
 ):
     queryset = Position.objects.all()
     serializer_class = PositionSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
 class LectureViewSet(GenericViewSet):
     serializer_class = LectureSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user_courses = self.request.user.courses.all()
