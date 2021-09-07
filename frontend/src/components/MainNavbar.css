@@ -1,3 +1,21 @@
-.navbar {
+.main-navbar {
   background-color: #004786;
+}
+
+.navbar-text {
+  text-align: center;
+}
+
+.navbar-text__span {
+  color: white;
+}
+
+.navbar-text__button {
+  color: white;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.navbar-text__button:hover {
+  color: lightskyblue;
 }
