@@ -19,3 +19,7 @@
 .navbar-text__button:hover {
   color: lightskyblue;
 }
+
+.navbar-text__button:first-letter {
+  text-transform: uppercase;
+}

@@ -9,7 +9,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { DEFAULT_OPTIONS } from "../utils/geolocation";
 import { getAndRegisterPosition } from "../utils/general";
 
-interface User {
+export interface User {
   username: string;
   email: string;
   first_name: string;
@@ -61,7 +61,7 @@ export default function Home(): JSX.Element {
 
   return (
     <>
-      <MainNavbar />
+      <MainNavbar user={user} />
       <Container className="home-container">{component}</Container>
     </>
   );
