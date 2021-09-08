@@ -1,6 +1,6 @@
 from datetime import date
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, logout
 from django.db import IntegrityError
 from django.http import Http404
 from rest_framework import mixins, status
@@ -32,6 +32,13 @@ class UserViewSet(GenericViewSet):
     @action(detail=False, permission_classes=[IsAuthenticated])
     def self(self, request):
         serializer = self.get_serializer(request.user)
+        return Response(serializer.data)
+
+    @action(detail=False, url_path="self/log-out", permission_classes=[IsAuthenticated])
+    def self_log_out(self, request):
+        user = request.user
+        logout(request)
+        serializer = self.get_serializer(user)
         return Response(serializer.data)
 
     @action(detail=True, url_path="last-position", serializer_class=PositionSerializer)
