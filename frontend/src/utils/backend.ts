@@ -22,12 +22,23 @@ const request = (
 ) => {
   const input = `${process.env.REACT_APP_BACKEND_URL}/api${urlPath}`;
   const init: RequestInit = {
-    body: body,
     credentials: "include",
-    headers: headers,
-    method: method,
+    body,
+    headers,
+    method,
   };
   return fetch(input, init);
+};
+
+const requestWithBody = (urlPath: string, method?: string, body?: unknown) => {
+  const headers = {
+    // TODO: remove.
+    // Authorization: "Token 391c9d7e93915bd170ba3c0e266e2f4274467dac",
+    "Content-Type": "application/json",
+    "X-CSRFToken": getCookie("csrftoken") || "",
+  };
+  const bodyJson = JSON.stringify(body);
+  return request(urlPath, method, headers, bodyJson);
 };
 
 const get = (urlPath: string) => {
@@ -38,16 +49,11 @@ const get = (urlPath: string) => {
   return request(urlPath, "GET", headers);
 };
 
-const post = (urlPath: string, data?: unknown) => {
-  const headers = {
-    // TODO: remove.
-    // Authorization: "Token 391c9d7e93915bd170ba3c0e266e2f4274467dac",
-    "Content-Type": "application/json",
-    "X-CSRFToken": getCookie("csrftoken") || "",
-  };
-  const body = JSON.stringify(data);
-  return request(urlPath, "POST", headers, body);
-};
+const post = (urlPath: string, body?: unknown) =>
+  requestWithBody(urlPath, "POST", body);
+
+const put = (urlPath: string, body?: unknown) =>
+  requestWithBody(urlPath, "PUT", body);
 
 export const registerPosition = (
   ip: string,
@@ -55,18 +61,20 @@ export const registerPosition = (
   longitude: number
 ): Promise<Response> => {
   const decimalPlaces = 6;
-  const data = {
+  const body = {
     ip,
     latitude: latitude.toFixed(decimalPlaces),
     longitude: longitude.toFixed(decimalPlaces),
   };
-  return post("/positions/", data);
+  return post("/positions/", body);
 };
 
 export const getLastPosition = (username: string): Promise<Response> =>
   get(`/users/${username}/last-position/`);
 
 export const getUserData = (): Promise<Response> => get("/users/self/");
+
+export const logOut = (): Promise<Response> => put("/users/self/log-out/");
 
 export const loadLectures = (): Promise<Response> => get("/lectures/today/");
 
