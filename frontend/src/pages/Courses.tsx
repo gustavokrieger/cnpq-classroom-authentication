@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import ConfirmationModal from "../components/ConfirmationModal";
-import { attendLecture, loadLectures } from "../utils/backend";
+import { attendLecture, loadLectures, logOut } from "../utils/backend";
 import Toast from "react-bootstrap/Toast";
 import { DEFAULT_OPTIONS } from "../utils/geolocation";
 import { getAndRegisterPosition } from "../utils/general";
@@ -132,13 +132,14 @@ export default function Courses(): JSX.Element {
       )}
       {/*TODO: remove button.*/}
       <Button
-        onClick={() =>
+        onClick={async () => {
+          await logOut();
           window.location.replace(
             "https://sp-implicit.cafeexpresso.rnp.br/saml2/login" +
               "/?next=https://sp-implicit.cafeexpresso.rnp.br" +
               "&idp=https://idp-implicit.cafeexpresso.rnp.br/idp/shibboleth"
-          )
-        }
+          );
+        }}
       >
         redirect
       </Button>
