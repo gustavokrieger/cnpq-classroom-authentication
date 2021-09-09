@@ -1,11 +1,9 @@
 import "./Login.css";
 import Button from "react-bootstrap/Button";
+import { LOGIN_URL } from "../utils/backend";
 
 export default function Login(): JSX.Element {
-  const handleClick = () =>
-    window.location.replace(
-      `${process.env.REACT_APP_LOGIN_BASE_URL}/saml2/login/`
-    );
+  const handleClick = () => window.location.replace(LOGIN_URL);
 
   return (
     <>

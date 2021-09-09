@@ -3,7 +3,6 @@ import Navbar from "react-bootstrap/Navbar";
 import univaliLogo from "../images/univaliLogo.png";
 import Button from "react-bootstrap/Button";
 import { User } from "../pages/Home";
-import { logOut as backendLogOut } from "../utils/backend";
 import { useHistory } from "react-router-dom";
 
 interface Props {
@@ -12,11 +11,6 @@ interface Props {
 
 export default function MainNavbar(props: Props): JSX.Element {
   const history = useHistory();
-
-  const logOut = () => {
-    backendLogOut();
-    history.push("/desautorizado");
-  };
 
   const getName = () => {
     if (!props.user) {
@@ -61,7 +55,7 @@ export default function MainNavbar(props: Props): JSX.Element {
             <Button
               className="navbar-text__button"
               variant="link"
-              onClick={logOut}
+              onClick={() => history.push("/logout")}
             >
               logout
             </Button>

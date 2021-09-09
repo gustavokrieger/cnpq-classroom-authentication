@@ -1,3 +1,5 @@
+export const LOGIN_URL = `${process.env.REACT_APP_LOGIN_BASE_URL}/saml2/login/`;
+
 // Copied from: https://docs.djangoproject.com/en/3.0/ref/csrf/#ajax
 const getCookie = (name: string) => {
   let cookieValue = null;

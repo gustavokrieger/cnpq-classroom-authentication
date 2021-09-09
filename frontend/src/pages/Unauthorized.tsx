@@ -2,12 +2,10 @@ import "./Unauthorized.css";
 import MainNavbar from "../components/MainNavbar";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
+import { LOGIN_URL } from "../utils/backend";
 
 export default function Unauthorized(): JSX.Element {
-  const handleClick = () =>
-    window.location.replace(
-      `${process.env.REACT_APP_LOGIN_BASE_URL}/saml2/login/`
-    );
+  const handleClick = () => window.location.replace(LOGIN_URL);
 
   return (
     <>
@@ -16,7 +14,9 @@ export default function Unauthorized(): JSX.Element {
         <h1 className="unauthorized-header">
           foi detectada alteração de posição.
         </h1>
-        <h3 className="unauthorized-sub-heading">faça login novamente.</h3>
+        <h3 className="unauthorized-sub-heading text-muted">
+          faça login novamente.
+        </h3>
         <Button className="unauthorized-button" onClick={handleClick}>
           login
         </Button>
