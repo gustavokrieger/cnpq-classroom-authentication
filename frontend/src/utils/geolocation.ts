@@ -19,7 +19,7 @@ export const getCurrentCoordinates = async (
   };
 };
 
-const getCurrentPosition = (
+export const getCurrentPosition = (
   options?: PositionOptions
 ): Promise<GeolocationPosition> =>
   new Promise((resolve, reject) =>
