@@ -1,12 +1,12 @@
 from datetime import date
 
 from django.contrib.auth import get_user_model, logout
-from django.db import IntegrityError
 from django.http import Http404
-from rest_framework import mixins, status
+from rest_framework import mixins
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.status import HTTP_422_UNPROCESSABLE_ENTITY
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
@@ -94,12 +94,10 @@ class LectureViewSet(GenericViewSet):
 
     @action(methods=["post"], detail=True)
     def attend(self, request, pk=None):
-        instance = self.get_object()
+        lecture = self.get_object()
         try:
-            Attendance.objects.register(request.user, instance)
-        except IntegrityError:
-            return Response(
-                {"status": "attendance already registered today"},
-                status=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            )
+            Attendance.objects.register(request.user, lecture)
+        except ValueError:
+            data = {"status": "lecture is not ongoing"}
+            return Response(data, status=HTTP_422_UNPROCESSABLE_ENTITY)
         return Response({"status": "attendance registered"})

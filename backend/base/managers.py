@@ -33,5 +33,5 @@ class LectureQuerySet(models.QuerySet):
 class AttendanceManager(models.Manager):
     def register(self, user, lecture):
         if not lecture.is_ongoing():
-            raise RuntimeError
+            raise ValueError
         return self.create(user=user, lecture=lecture)

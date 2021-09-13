@@ -45,6 +45,15 @@ export default function Courses(): JSX.Element {
     [history]
   );
 
+  const unprocessableRefresh = useCallback(
+    (response: Response) => {
+      if (response.status === 422) {
+        history.go(0);
+      }
+    },
+    [history]
+  );
+
   useEffect(() => {
     const getAndRegisterPositionDefault = async () => {
       const response = await getAndRegisterPosition(DEFAULT_OPTIONS);
@@ -72,6 +81,7 @@ export default function Courses(): JSX.Element {
     const interval = setInterval(async () => {
       const response = await attendLecture(attendingLecture.id);
       unauthorizedRedirect(response);
+      unprocessableRefresh(response);
       setShowToast(true);
     }, 6_000);
 
