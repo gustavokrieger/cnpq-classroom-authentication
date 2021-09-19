@@ -1,2 +1,0 @@
-class InvalidTemporaryTokenError(Exception):
-    pass

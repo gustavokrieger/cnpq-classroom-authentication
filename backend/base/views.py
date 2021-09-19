@@ -7,12 +7,10 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_422_UNPROCESSABLE_ENTITY
-from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from base.models import TemporaryToken, Lecture, Attendance, Position
+from base.models import Lecture, Attendance, Position
 from base.serializers import (
-    TokenExchangeSerializer,
     UserSerializer,
     LectureSerializer,
     LectureAttendanceSerializer,
@@ -34,7 +32,12 @@ class UserViewSet(GenericViewSet):
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)
 
-    @action(methods=["put"], detail=False, url_path="self/log-out", permission_classes=[IsAuthenticated])
+    @action(
+        methods=["put"],
+        detail=False,
+        url_path="self/log-out",
+        permission_classes=[IsAuthenticated],
+    )
     def self_log_out(self, request):
         user = request.user
         logout(request)
@@ -57,15 +60,6 @@ class UserViewSet(GenericViewSet):
         user.log_out()
         serializer = self.get_serializer(user)
         return Response(serializer.data)
-
-
-class TokenExchangeView(APIView):
-    def post(self, request):
-        serializer = TokenExchangeSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        temporary_token_key = serializer.validated_data["temporary_token"]
-        token = TemporaryToken.objects.exchange(temporary_token_key)
-        return Response({"token": token.key})
 
 
 class PositionViewSet(

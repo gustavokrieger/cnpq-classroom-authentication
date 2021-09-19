@@ -1,14 +1,11 @@
-from datetime import timedelta, datetime, date
+from datetime import datetime, date
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils import timezone
 from rest_framework.authtoken.models import Token
 
-from base.exceptions import InvalidTemporaryTokenError
 from base.managers import (
-    TemporaryTokenManager,
     LectureQuerySet,
     AttendanceManager,
 )
@@ -22,19 +19,6 @@ class User(AbstractUser):
         # Changing a user’s password will log out all their sessions.
         self.set_unusable_password()
         self.save(update_fields=["password"])
-
-
-class TemporaryToken(Token):
-    lifespan = models.DurationField(default=timedelta(seconds=300))
-
-    objects = TemporaryTokenManager()
-
-    def check_if_valid(self):
-        if self._has_expired():
-            raise InvalidTemporaryTokenError("expired token")
-
-    def _has_expired(self):
-        return timezone.now() > self.created + self.lifespan
 
 
 class Position(models.Model):

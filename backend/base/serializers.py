@@ -12,10 +12,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["username", "first_name", "last_name", "email"]
 
 
-class TokenExchangeSerializer(serializers.Serializer):
-    temporary_token = serializers.CharField(write_only=True)
-
-
 class PositionSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
