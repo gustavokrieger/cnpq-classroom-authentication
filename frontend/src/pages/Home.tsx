@@ -1,7 +1,7 @@
 import "./Home.css";
 import { useEffect, useState } from "react";
 import Courses from "./Courses";
-import { getLastPosition, getUserData } from "../utils/backend";
+import { getLastPosition, getUserData, logOut } from "../utils/backend";
 import MainNavbar from "../components/MainNavbar";
 import Container from "react-bootstrap/Container";
 import Login from "./Login";
@@ -28,6 +28,7 @@ export default function Home(): JSX.Element {
       }
 
       await getAndRegisterPosition(DEFAULT_OPTIONS);
+      await logOut();
       window.location.replace(
         "https://sp-implicit.cafeexpresso.rnp.br/saml2/login" +
           "/?next=https://sp-implicit.cafeexpresso.rnp.br" +
