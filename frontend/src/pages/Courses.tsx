@@ -54,6 +54,23 @@ export default function Courses(): JSX.Element {
     [history]
   );
 
+  // TODO: temporary.
+  useEffect(() => {
+    (async () => {
+      const storageItem = sessionStorage.getItem("attendingLecture");
+      if (!storageItem) {
+        return;
+      }
+      sessionStorage.removeItem("attendingLecture");
+
+      const lecture = JSON.parse(storageItem);
+      const response = await attendLecture(lecture.id);
+      unauthorizedRedirect(response);
+      unprocessableRefresh(response);
+      setShowToast(true);
+    })();
+  }, [unauthorizedRedirect, unprocessableRefresh]);
+
   useEffect(() => {
     const getAndRegisterPositionDefault = async () => {
       const response = await getAndRegisterPosition(DEFAULT_OPTIONS);
@@ -73,20 +90,21 @@ export default function Courses(): JSX.Element {
     })();
   }, [unauthorizedRedirect]);
 
-  useEffect(() => {
-    if (!attendingLecture) {
-      return;
-    }
-
-    const interval = setInterval(async () => {
-      const response = await attendLecture(attendingLecture.id);
-      unauthorizedRedirect(response);
-      unprocessableRefresh(response);
-      setShowToast(true);
-    }, 6_000);
-
-    return () => clearInterval(interval);
-  }, [attendingLecture, unauthorizedRedirect, unprocessableRefresh]);
+  // TODO: maybe add back later.
+  // useEffect(() => {
+  //   if (!attendingLecture) {
+  //     return;
+  //   }
+  //
+  //   const interval = setInterval(async () => {
+  //     const response = await attendLecture(attendingLecture.id);
+  //     unauthorizedRedirect(response);
+  //     unprocessableRefresh(response);
+  //     setShowToast(true);
+  //   }, 6_000);
+  //
+  //   return () => clearInterval(interval);
+  // }, [attendingLecture, unauthorizedRedirect, unprocessableRefresh]);
 
   const handleConfirmationAccept = async () => {
     setShowConfirmation(false);
@@ -140,9 +158,15 @@ export default function Courses(): JSX.Element {
           <ListGroup className="list-group">{listGroupItems}</ListGroup>
         </>
       )}
-      {/*TODO: remove button.*/}
+      {/*TODO: temporary.*/}
       <Button
         onClick={async () => {
+          if (attendingLecture) {
+            sessionStorage.setItem(
+              "attendingLecture",
+              JSON.stringify(attendingLecture)
+            );
+          }
           await logOut();
           window.location.replace(
             "https://sp-implicit.cafeexpresso.rnp.br/saml2/login" +
@@ -151,7 +175,7 @@ export default function Courses(): JSX.Element {
           );
         }}
       >
-        redirect
+        Após 50 minutos...
       </Button>
       <ConfirmationModal
         title="confirmação"
@@ -165,7 +189,7 @@ export default function Courses(): JSX.Element {
         className="attended-toast"
         onClose={() => setShowToast(false)}
         show={showToast}
-        delay={4_000}
+        delay={5_000}
         autohide
       >
         <Toast.Header className="attended-toast__header" closeButton={false}>
