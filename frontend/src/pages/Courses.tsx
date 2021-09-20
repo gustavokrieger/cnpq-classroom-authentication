@@ -54,23 +54,6 @@ export default function Courses(): JSX.Element {
     [history]
   );
 
-  // TODO: temporary.
-  useEffect(() => {
-    (async () => {
-      const storageItem = sessionStorage.getItem("attendingLecture");
-      if (!storageItem) {
-        return;
-      }
-      sessionStorage.removeItem("attendingLecture");
-
-      const lecture = JSON.parse(storageItem);
-      const response = await attendLecture(lecture.id);
-      unauthorizedRedirect(response);
-      unprocessableRefresh(response);
-      setShowToast(true);
-    })();
-  }, [unauthorizedRedirect, unprocessableRefresh]);
-
   useEffect(() => {
     const getAndRegisterPositionDefault = async () => {
       const response = await getAndRegisterPosition(DEFAULT_OPTIONS);
@@ -89,6 +72,23 @@ export default function Courses(): JSX.Element {
       setLectures(await response.json());
     })();
   }, [unauthorizedRedirect]);
+
+  // TODO: temporary.
+  useEffect(() => {
+    (async () => {
+      const storageItem = sessionStorage.getItem("attendingLecture");
+      if (!storageItem) {
+        return;
+      }
+      sessionStorage.removeItem("attendingLecture");
+
+      const lecture = JSON.parse(storageItem);
+      const response = await attendLecture(lecture.id);
+      unauthorizedRedirect(response);
+      unprocessableRefresh(response);
+      setShowToast(true);
+    })();
+  }, [unauthorizedRedirect, unprocessableRefresh]);
 
   // TODO: maybe add back later.
   // useEffect(() => {
