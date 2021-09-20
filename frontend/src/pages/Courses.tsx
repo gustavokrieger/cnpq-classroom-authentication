@@ -86,7 +86,7 @@ export default function Courses(): JSX.Element {
     }, 6_000);
 
     return () => clearInterval(interval);
-  }, [attendingLecture, unauthorizedRedirect]);
+  }, [attendingLecture, unauthorizedRedirect, unprocessableRefresh]);
 
   const handleConfirmationAccept = async () => {
     setShowConfirmation(false);
