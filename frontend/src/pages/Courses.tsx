@@ -83,6 +83,7 @@ export default function Courses(): JSX.Element {
       sessionStorage.removeItem("attendingLecture");
 
       const lecture = JSON.parse(storageItem);
+      setAttendingLecture(lecture);
       const response = await attendLecture(lecture.id);
       unauthorizedRedirect(response);
       unprocessableRefresh(response);
@@ -168,11 +169,12 @@ export default function Courses(): JSX.Element {
             );
           }
           await logOut();
-          window.location.replace(
-            "https://sp-implicit.cafeexpresso.rnp.br/saml2/login" +
-              "/?next=https://sp-implicit.cafeexpresso.rnp.br" +
-              "&idp=https://idp-implicit.cafeexpresso.rnp.br/idp/shibboleth"
-          );
+          // window.location.replace(
+          //   "https://sp-implicit.cafeexpresso.rnp.br/saml2/login" +
+          //     "/?next=https://sp-implicit.cafeexpresso.rnp.br" +
+          //     "&idp=https://idp-implicit.cafeexpresso.rnp.br/idp/shibboleth"
+          // );
+          location.reload();
         }}
       >
         Após 50 minutos...
