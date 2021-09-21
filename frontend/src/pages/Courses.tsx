@@ -168,13 +168,12 @@ export default function Courses(): JSX.Element {
               JSON.stringify(attendingLecture)
             );
           }
-          // await logOut();
-          // window.location.replace(
-          //   "https://sp-implicit.cafeexpresso.rnp.br/saml2/login" +
-          //     "/?next=https://sp-implicit.cafeexpresso.rnp.br" +
-          //     "&idp=https://idp-implicit.cafeexpresso.rnp.br/idp/shibboleth"
-          // );
-          location.reload();
+          await logOut();
+          window.location.replace(
+            "https://sp-implicit.cafeexpresso.rnp.br/saml2/login" +
+              "/?next=https://sp-implicit.cafeexpresso.rnp.br" +
+              "&idp=https://idp-implicit.cafeexpresso.rnp.br/idp/shibboleth"
+          );
         }}
       >
         Após 50 minutos...
