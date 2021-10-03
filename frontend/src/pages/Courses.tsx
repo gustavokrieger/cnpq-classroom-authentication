@@ -25,7 +25,9 @@ export default function Courses(): JSX.Element {
   const [lectures, setLectures] = useState<readonly Lecture[]>([]);
   const [selectedLecture, setSelectedLecture] =
     useState<Readonly<Lecture> | null>(null);
-  const [attendingLecture, setAttendingLecture] =
+  const [pendingLecture, setPendingLecture] =
+    useState<Readonly<Lecture> | null>(null);
+  const [lectureToAttend, setLectureToAttend] =
     useState<Readonly<Lecture> | null>(null);
 
   // TODO: maybe add back later.
@@ -73,17 +75,16 @@ export default function Courses(): JSX.Element {
     })();
   }, [unauthorizedRedirect]);
 
-  // TODO: temporary.
   useEffect(() => {
     (async () => {
-      const storageItem = sessionStorage.getItem("attendingLecture");
+      const storageItem = sessionStorage.getItem("lectureToAttend");
       if (!storageItem) {
         return;
       }
-      sessionStorage.removeItem("attendingLecture");
+      sessionStorage.removeItem("lectureToAttend");
 
       const lecture = JSON.parse(storageItem);
-      setAttendingLecture(lecture);
+      setLectureToAttend(lecture);
       const response = await attendLecture(lecture.id);
       unauthorizedRedirect(response);
       unprocessableRefresh(response);
@@ -93,27 +94,27 @@ export default function Courses(): JSX.Element {
 
   // TODO: maybe add back later.
   // useEffect(() => {
-  //   if (!attendingLecture) {
+  //   if (!pendingLecture) {
   //     return;
   //   }
   //
   //   const interval = setInterval(async () => {
-  //     const response = await attendLecture(attendingLecture.id);
+  //     const response = await attendLecture(pendingLecture.id);
   //     unauthorizedRedirect(response);
   //     unprocessableRefresh(response);
   //     setShowToast(true);
   //   }, 6_000);
   //
   //   return () => clearInterval(interval);
-  // }, [attendingLecture, unauthorizedRedirect, unprocessableRefresh]);
+  // }, [pendingLecture, unauthorizedRedirect, unprocessableRefresh]);
 
   const handleConfirmationAccept = async () => {
     setShowConfirmation(false);
-    setAttendingLecture(selectedLecture);
+    setPendingLecture(selectedLecture);
   };
 
   const getListGroupProps = (lecture: Lecture) => {
-    if (lecture.id === attendingLecture?.id) {
+    if (lecture.id === pendingLecture?.id) {
       return {
         variant: "success",
       };
@@ -162,10 +163,10 @@ export default function Courses(): JSX.Element {
       {/*TODO: temporary.*/}
       <Button
         onClick={async () => {
-          if (attendingLecture) {
+          if (pendingLecture) {
             sessionStorage.setItem(
-              "attendingLecture",
-              JSON.stringify(attendingLecture)
+              "lectureToAttend",
+              JSON.stringify(pendingLecture)
             );
           }
           await logOut();
@@ -197,7 +198,7 @@ export default function Courses(): JSX.Element {
           <strong>aviso</strong>
         </Toast.Header>
         <Toast.Body className="attended-toast__body">
-          {`presença em ${attendingLecture?.course} registrada.`}
+          {`presença em ${lectureToAttend?.course} registrada.`}
         </Toast.Body>
       </Toast>
     </>
