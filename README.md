@@ -1,5 +1,7 @@
 # CNPq Classroom Authentication
 
+This project was a proof of concept made with the Brazilian National Council for Scientific and Technological Development.
+
 ### Setup:
 
 First, open a terminal window and navigate root directory of this project.
